@@ -331,31 +331,54 @@ var mutation = new GraphQLObjectType({
           text: {
             type: GraphQLString
           },
+          imageURL: {
+            type: GraphQLString
+          },
           width: {
             type: GraphQLInt
           },
           height: {
             type: GraphQLInt
           },
+          imageWidth: {
+            type: GraphQLInt
+          },
+          imageHeight: {
+            type: GraphQLInt
+          }
         },
         resolve: function (root, params) {
-        const userLogo=  userModel.findOneAndUpdate(
+          const userLogo = userModel.findOneAndUpdate(
             { '_id': params.userId },
-            { $push: { Logos: { Texts: { text: params.text, fontSize: params.fontSize, color: params.color }, width: params.width, height: params.height } } });
-            if (!userLogo) {
-              throw new Error('Error')
-            }
-            return userLogo
+            {
+              $push: {
+                Logos: {
+                  Texts: {
+                    text: params.text, fontSize: params.fontSize, color: params.color, backgroundColor: params.backgroundColor,
+                    borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius
+                  },
+                  images: { imageURL: params.imageURL, width: params.imageWidth, height: params.imageHeight },
+                  width: params.width, height: params.height
+                }
+              }
+            });
+          if (!userLogo) {
+            throw new Error('Error')
+          }
+          return userLogo
         }
       },
-      UserAddText: {
+      LogoAddText: {
         type: UserType,
         args: {
 
-
+          id: {
+            type: GraphQLString
+          },
           LogoId: {
             type: GraphQLString
-          },fontSize: {
+          }, 
+          fontSize: {
             type: GraphQLInt
           },
           color: {
@@ -380,17 +403,58 @@ var mutation = new GraphQLObjectType({
         },
         resolve: function (root, params) {
           var objFriends = null;
-          userModel.findOneAndUpdate(
-            { 'Logos._id': params.LogoId },
-            { $push: { Texts: { text: "fuck" } } },
-            function (error, success) {
-              if (error) {
-                console.log(error);
-              } else {
-                console.log(success);
+          const userLogo= userModel.updateOne({ "_id": params.id, "Logos._id": params.LogoId },
+            {
+              $push: {
+                "Logos.$.Texts": {
+                    text:params.text, fontSize:params.fontSize , color:params.color
+                }
               }
             });
 
+            if (!userLogo) {
+              throw new Error('Error')
+            }
+            return userLogo
+        }
+      },
+      LogoAddImage: {
+        type: UserType,
+        args: {
+
+          id: {
+            type: GraphQLString
+          },
+          LogoId: {
+            type: GraphQLString
+          },
+          imageURL: {
+            type:GraphQLString
+          },
+          imageWidth: {
+            type: GraphQLInt
+          },
+          imageHeight: {
+            type: GraphQLInt
+          }
+          
+
+        },
+        resolve: function (root, params) {
+       
+          const userLogo= userModel.updateOne({ "_id": params.id, "Logos._id": params.LogoId },
+            {
+              $push: {
+                "Logos.$.images": {
+                    imageURL:params.imageURL, width:params.imageWidth , height: params.imageHeight
+                }
+              }
+            });
+
+            if (!userLogo) {
+              throw new Error('Error')
+            }
+            return userLogo
         }
       }
     }

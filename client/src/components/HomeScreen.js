@@ -5,13 +5,17 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 
 const GET_LOGOS = gql`
-  {
-    logos {
-      _id
-      text
-      lastUpdate
+{
+    user(id:"5eba3121cb5a650a586ada97"){
+      _id,
+      username,
+      email, 
+      Logos{
+        _id
+      }
     }
   }
+  
 `;
 
 class HomeScreen extends Component {
@@ -22,12 +26,13 @@ class HomeScreen extends Component {
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
-                    data.logos.sort((a,b)=> (a.lastUpdate < b.lastUpdate)? 1: -1);
-                    for( let i =0 ;i < data.logos.length; i++){
-                        if(data.logos[i].text.length > 25){
-                            data.logos[i].text = data.logos[i].text.substring(0, 25 )+ "...";
-                        }
-                    }
+                    console.log(data);
+                    // data.logos.sort((a,b)=> (a.lastUpdate < b.lastUpdate)? 1: -1);
+                    // for( let i =0 ;i < data.logos.length; i++){
+                    //     if(data.logos[i].text.length > 25){
+                    //         data.logos[i].text = data.logos[i].text.substring(0, 25 )+ "...";
+                    //     }
+                    // }
                     
                     return (
                         <div className="container_row">
