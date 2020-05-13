@@ -10,7 +10,7 @@ var cors = require("cors");
 
 mongoose.connect('mongodb://localhost/node-graphql', { promiseLibrary: require('bluebird'), useNewUrlParser: true })
   .then(() =>  console.log('connection successful'))
-  .catch((err) => console.error(err));
+  .catch((err) => console.error("this is the errror: "+ err));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
