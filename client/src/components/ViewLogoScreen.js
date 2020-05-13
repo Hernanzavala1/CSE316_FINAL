@@ -5,23 +5,36 @@ import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
 const GET_LOGO = gql`
-    query logo($logoId: String) {
-        logo(id: $logoId) {
+query User($id: String, $logoId : String ){
+    singleLogo(id: $id,  logoId: $logoId ){
+      _id
+    username 
+      email
+      password
+        Logos{
             _id
-            text
-            color
-            borderColor
-            backgroundColor
-            fontSize
-            borderRadius
-            borderWidth
-            padding
-            margin
-            lastUpdate
+                Texts{
+                    fontSize
+                    color
+                    backgroundColor 
+                    borderColor
+                    borderWidth
+                    borderRadius
+                    text
+                }
+            }
+            images{
+                    _id
+                    imageURL        
+                    width
+                    height
         }
+        width
+        height
     }
-`;
+  }
 
+`;
 const DELETE_LOGO = gql`
   mutation removeLogo($id: String!) {
     removeLogo(id:$id) {
@@ -39,11 +52,13 @@ class ViewLogoScreen extends Component {
         
         
         return (
-            <Query pollInterval={500} query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
+            <Query pollInterval={500} query={GET_LOGO} variables={{id:this.props.match.params.id, logoId: this.props.match.params.logoId }}>
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
-                    
+                    let logo = data.user.Logos[0];
+                        console.log(logo);
+                        console.log("the logo is above ")
                     return (
                         <div className="container">
                             <nav className="nav-bar">

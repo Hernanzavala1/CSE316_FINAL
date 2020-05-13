@@ -36,7 +36,8 @@ class HomeScreen extends Component {
                     if (error) return `Error! ${error.message}`;
                     //  console.log(data.user.Logos[0].Texts[0].text);
                     let Logos = data.user.Logos;
-                    console.log(Logos)
+
+                    console.log(data.user._id)
 
                     console.log(Logos[0].Texts[0].text);
                     // data.logos.sort((a,b)=> (a.lastUpdate < b.lastUpdate)? 1: -1);
@@ -47,43 +48,87 @@ class HomeScreen extends Component {
                     // }
 
                     return (
-                        <div className="container d-flex justify-content-center ">
-                            <div class="row  ">
+                        <div class="container ">
+                            <div class="row1Header center-block  text-center">
+                                <div class="col-lg-12  ">
 
-                                <div class="col-lg-7 no-gutters">
-                                    <div class="leftside d-flex justify-content-center ">
-                                        <div className="recent_work_list">
-                                            <h3>Recent Work</h3>
-                                            {data.user.Logos.map((logo, index) => (
+                                    <h1>Welcome {data.user.username}</h1>
 
-                                                <div key={index} className='home_logo_link'
-                                                    style={{ cursor: "pointer" }}>
-
-                                                    <Link style={{ color: "black" }} to={`/view/${logo._id}`}>{logo.Texts[0].text}</Link>
-
-                                                </div>
-
-
-
-
-                                            ))}
-                                        </div>
-                                    </div>
 
                                 </div>
-                                <div class="col-lg-6 col-lg-offset-6 no-gutters">
-
-                                    <div class="rightside d-flex justify-content-center">
-
-                                        <h3>
-                                            RIGHT HAND SIDE
-                                </h3>
-
-                                    </div>
-                                </div>
-
 
                             </div>
+
+                            <div class="row center-block  text-center h-100 ">
+
+                                <div class="col-lg-8 ">
+                                    <div class="well">
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                    </div>
+
+
+                                    <div >
+                                        <h3>Recent Work</h3>
+                                        {data.user.Logos.map((logo, index) => (
+
+                                            <div key={index} className='home_logo_link'
+                                                style={{ cursor: "pointer" }}>
+
+                                                <Link style={{ color: "black" }} to={`/view/${data.user._id}/${logo._id}`}>{logo.Texts[0].text}</Link>
+
+                                            </div>
+
+
+
+
+                                        ))}
+                                    </div>
+
+                                </div>
+
+
+
+
+                                <div class="col col-lg-offset-6">
+                                    <div class="well">
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                    </div>
+
+                                    <div class="vcenter">
+                                        <div>
+                                            <h3 > Menu </h3>
+                                        </div>
+
+                                        <div>
+                                            {console.log("user id "+ data.user._id)}
+                                            <Link  to={`/user/${data.user._id}`}> 
+                                             <button type="button" class="btn btn-primary btn-block">User</button>
+                                            </Link>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-primary btn-block ">Create Logo</button>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-primary btn-block ">LogOut</button>
+                                        </div>
+
+                                    </div>
+
+
+
+
+                                </div>
+                            </div>
+
+
                         </div>
 
 

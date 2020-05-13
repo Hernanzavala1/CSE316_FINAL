@@ -11,6 +11,7 @@
   --swatch-accent:        #669966; /* USED IN MOUSE-OVER SELECTION OF TEXT AND BORDERS */    
   --my-font-family:          "Robaaaoto";
   --bounceEasing: cubic-bezier(0.51, 0.92, 0.24, 1.15);
+
 }
 .nav-bar{
 background-color: red;
@@ -110,3 +111,41 @@ align-self: center;
   height: 100vh;
   background: red;
 } */
+.vcenter {
+  display:inline-block !important;
+  vertical-align:middle !important;   
+}
+.btn{
+  margin: 10px;
+  color: white;
+  background-color: black;
+}
+
+.row1user{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  padding: 10px;
+  color: white;
+  background: black;
+  border: solid;
+      border-top-width: medium;
+      border-right-width: medium;
+      border-bottom-width: medium;
+      border-left-width: medium;
+  border-width: 10px;
+
+}
+.row1Header{
+  margin-top: 5%;
+  margin-bottom: 5%;
+  padding: 10px;
+  color: white;
+  background: black;
+  border: solid;
+      border-top-width: medium;
+      border-right-width: medium;
+      border-bottom-width: medium;
+      border-left-width: medium;
+  border-width: 10px;
+
+}

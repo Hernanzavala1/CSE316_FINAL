@@ -265,6 +265,30 @@ var queryType = new GraphQLObjectType({
           return userLogo
 
         }
+      },
+      singleLogo: {
+        type: UserType,
+        args: {
+          userId: {
+            name: 'id',
+            type: GraphQLString
+          },
+          logoId: {
+            name: 'LogoId',
+            type: GraphQLString
+          }
+        },
+        resolve: function (root, params) {
+          // const userLogo = userModel.findOne({'username':params.username, 'Logos._id':params.logoId, 'Logos.Texts._id':params.textId},{'Logos.$':1},{'Logos.Texts.$':1}).exec()
+          const userLogo = userModel.findOne({ '_id': params.userId, 'Logos._id': params.logoId},{'Logos.$':1}, function (error, documents) {
+            console.log(documents);
+          });
+          if (!userLogo) {
+            throw new Error('Error')
+          }
+          return userLogo
+
+        }
       }
     }
   }
