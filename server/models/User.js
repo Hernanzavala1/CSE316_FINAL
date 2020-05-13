@@ -20,8 +20,8 @@ var UserSchema = new mongoose.Schema({
              images: [{
                 id: String,
                 imageURL: String,
-                width: {type: Number, min: 0, max: 100},
-                height: {type: Number, min: 0, max: 100},
+                imageWidth: {type: Number, min: 0, max: 100},
+                imageHeight: {type: Number, min: 0, max: 100},
                 
            }],
            width: {type: Number, min: 0, max: 100},

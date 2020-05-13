@@ -5,8 +5,9 @@ import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 
 const GET_LOGO = gql`
-query User($id: String, $logoId : String ){
-    singleLogo(id: $id,  logoId: $logoId ){
+
+query User($userId: String, $logoId: String ){
+   singleLogo(userId: $userId,  logoId: $logoId ){
       _id
     username 
       email
@@ -22,19 +23,35 @@ query User($id: String, $logoId : String ){
                     borderRadius
                     text
                 }
-            }
-            images{
-                    _id
-                    imageURL        
-                    width
-                    height
-        }
-        width
-        height
-    }
-  }
+                images{
+                    imageURL
+                    imageWidth
+                    imageHeight
+                }
 
+            }
+        
+    }
+  
+}
 `;
+// const GET_LOGO = gql`
+//     query logo($logoId: String) {
+//         logo(id: $logoId) {
+//             _id
+//             text
+//             color
+//             borderColor
+//             backgroundColor
+//             fontSize
+//             borderRadius
+//             borderWidth
+//             padding
+//             margin
+//         }
+//     }
+// `;
+
 const DELETE_LOGO = gql`
   mutation removeLogo($id: String!) {
     removeLogo(id:$id) {
@@ -45,20 +62,25 @@ const DELETE_LOGO = gql`
 
 class ViewLogoScreen extends Component {
 
-  
+    componentDidMount = () => {
+        console.log("this is the id :" + this.props.match.params.id);
+        console.log("this is the logo id :" + this.props.match.params.logoId);
+    }
 
     render() {
 
         
         
         return (
-            <Query pollInterval={500} query={GET_LOGO} variables={{id:this.props.match.params.id, logoId: this.props.match.params.logoId }}>
+            <Query pollInterval={500} query={GET_LOGO} variables={{userId:this.props.match.params.id, logoId: this.props.match.params.logoId }}>
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
-                    let logo = data.user.Logos[0];
+                    let logo = data.singleLogo.Logos[0];
+                        console.log("The logo is ")
                         console.log(logo);
                         console.log("the logo is above ")
+                      
                     return (
                         <div className="container">
                             <nav className="nav-bar">
@@ -87,29 +109,24 @@ class ViewLogoScreen extends Component {
                                         <dt>Text:</dt>
                                         <div className="col s8" style={{display:"inline-grid"}}>
                                             <pre  style={{overflow:"auto"}}>
-                                        <dd  >{data.logo.text}</dd>
+                                        <dd  >{logo.Texts[0].text}</dd>
                                         </pre>
                                           </div>   
                                         <dt>Color:</dt>
-                                        <dd>{data.logo.color}</dd>
+                                        <dd>{logo.Texts[0].color}</dd>
                                         <dt>borderColor:</dt>
-                                        <dd>{data.logo.borderColor}</dd>
+                                        <dd>{logo.Texts[0].borderColor}</dd>
                                         <dt>backgroundColor:</dt>
-                                        <dd>{data.logo.backgroundColor}</dd>
+                                        <dd>{logo.Texts[0].backgroundColor}</dd>
                                         <dt>Font Size:</dt>
-                                        <dd>{data.logo.fontSize}</dd>
+                                        <dd>{logo.Texts[0].fontSize}</dd>
                                         <dt>Border Radius:</dt>
-                                        <dd>{data.logo.borderRadius}</dd>
+                                        <dd>{logo.Texts[0].borderRadius}</dd>
                                         <dt>Border Width:</dt>
-                                        <dd>{data.logo.borderWidth}</dd>
-                                        <dt>padding:</dt>
-                                        <dd>{data.logo.padding}</dd>
-                                        <dt>margin:</dt>
-                                        <dd>{data.logo.margin}</dd>
-                                        <dt>Last Updated:</dt>
-                                        <dd>{data.logo.lastUpdate}</dd>
+                                        <dd>{logo.Texts[0].borderWidth}</dd>
+                                       
                                     </dl>
-                                    <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
+                                    {/* <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
                                         {(removeLogo, { loading, error }) => (
                                             <div>
                                                 <form
@@ -124,24 +141,23 @@ class ViewLogoScreen extends Component {
                                                 {error && <p>Error :( Please try again</p>}
                                             </div>
                                         )}
-                                    </Mutation>
+                                    </Mutation> */}
                                     </div>
                                 </div>
                                 <div className="workspace">
 
                                     <pre
                                         className="logo" style={{
-                                            backgroundColor: data.logo.backgroundColor,
-                                            fontSize: data.logo.fontSize,
-                                            borderColor: data.logo.borderColor,
-                                            borderRadius: data.logo.borderRadius,
-                                            borderWidth: data.logo.borderWidth,
-                                            padding: data.logo.padding,
-                                            margin: data.logo.margin, color: data.logo.color, borderStyle: "solid"
+                                            // backgroundColor: data.logo.backgroundColor,
+                                            // fontSize: data.logo.fontSize,
+                                            // borderColor: data.logo.borderColor,
+                                            // borderRadius: data.logo.borderRadius,
+                                            // borderWidth: data.logo.borderWidth,
+                                            // color: data.logo.color, borderStyle: "solid"
                                         }}
                                     >
 
-                                        {data.logo.text}
+                                        {logo.Texts[0].text}
                                     </pre>
 
                                 </div>

@@ -6,7 +6,7 @@ import { Query } from 'react-apollo';
 
 const GET_LOGOS = gql`
 {
-    user(id:"5eba3121cb5a650a586ada97"){
+    user(id:"5e9384ab85b1763c50ba98da"){
           _id
           username
           email

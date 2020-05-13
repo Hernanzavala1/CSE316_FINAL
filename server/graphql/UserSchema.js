@@ -23,10 +23,10 @@ var ImagesInput = new GraphQLInputObjectType({
       imageURL: {
         type: GraphQLString
       },
-      width: {
+      imageWidth: {
         type: GraphQLInt
       },
-      height: {
+      imageHeight: {
         type: GraphQLInt
       }
     }
@@ -46,10 +46,10 @@ var Images = new GraphQLObjectType({
       imageURL: {
         type: GraphQLString
       },
-      width: {
+      imageWidth: {
         type: GraphQLInt
       },
-      height: {
+      imageHeight: {
         type: GraphQLInt
       }
     }
@@ -381,7 +381,7 @@ var mutation = new GraphQLObjectType({
                     text: params.text, fontSize: params.fontSize, color: params.color, backgroundColor: params.backgroundColor,
                     borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius
                   },
-                  images: { imageURL: params.imageURL, width: params.imageWidth, height: params.imageHeight },
+                  images: { imageURL: params.imageURL, imageWidth: params.imageWidth, imageHeight: params.imageHeight },
                   width: params.width, height: params.height
                 }
               }
@@ -470,7 +470,7 @@ var mutation = new GraphQLObjectType({
             {
               $push: {
                 "Logos.$.images": {
-                    imageURL:params.imageURL, width:params.imageWidth , height: params.imageHeight
+                    imageURL:params.imageURL, imageWidth:params.imageWidth , imageHeight: params.imageHeight
                 }
               }
             });
