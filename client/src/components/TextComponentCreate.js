@@ -1,7 +1,7 @@
 // IMPORT ALL THE THINGS NEEDED FROM OTHER JAVASCRIPT SOURCE FILES
 import React, { Component } from 'react'
 
-export class TextComponent extends Component {
+export class TextComponentCreate extends Component {
     constructor(props) {
         super(props);
 
@@ -21,7 +21,7 @@ export class TextComponent extends Component {
     }
 
     TextClicked =(e)=>{
-           
+            console.log(this.state.index);
             this.props.textClicked(this.state.index);
     }
   
@@ -29,7 +29,7 @@ export class TextComponent extends Component {
     render() {
         const styles = {
             container: {
-                color: this.props.text.color,
+                color: this.props.text.textColor,
                 fontSize: this.props.text.fontSize + "pt",
                 backgroundColor: this.props.text.backgroundColor,
                 borderColor: this.props.text.borderColor,
@@ -53,4 +53,4 @@ export class TextComponent extends Component {
     }
 }
 
-export default TextComponent
+export default TextComponentCreate

@@ -3,7 +3,9 @@ import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import { Link } from 'react-router-dom';
 import { parse } from 'graphql';
-
+import {TextComponentCreate} from '../components/TextComponentCreate'
+import {TextComponent} from '../components/TextComponent'
+import { NewText } from './NewText';
 const ADD_LOGO = gql`
     mutation AddLogo(
         $text: String!,
@@ -40,18 +42,19 @@ class CreateLogoScreen extends Component {
         // VALUES HERE
 
         this.state = {
-            textColor: "#123456",
-            fontSize: 30,
-            backgroundColor: "#654321",
-            borderColor: "#004488",
-            borderRadius: 10,
-            borderWidth: 0,
-            padding: 0,
-            margin: 0,
-            textInput: "gologolo logo"
+            textArray : [new NewText()], 
+            currentText : 0, 
+            numTexts : 1,
+            update: false
         }
 
 
+    }
+    componentDidMount = () => {
+        let array =[];
+        array.push(new NewText());
+        this.setState({textArray:array});
+      //  this.state.textArray.push(new NewText());
     }
     updateText = (event) => {
         this.setState({ textInput: event.target.value })
@@ -68,7 +71,10 @@ class CreateLogoScreen extends Component {
     }
     fontSizeChange = (event) => {
         console.log(event.target.value)
-        this.setState({ fontSize: event.target.value })
+        this.setState({update:true});
+        this.state.textArray[this.state.currentText].fontSize = event.target.value;
+        this.setState({update:false});
+        
     }
     borderRadiusChange = (event) => {
         this.setState({ borderRadius: event.target.value })
@@ -76,12 +82,7 @@ class CreateLogoScreen extends Component {
     borderWidthChange = (event) => {
         this.setState({ borderWidth: event.target.value })
     }
-    paddingChange = (event) => {
-        this.setState({ padding: event.target.value })
-    }
-    MarginChange = (event) => {
-        this.setState({ margin: event.target.value })
-    }
+  
     checkInput = () => {
         // this is where i can check the input of the text !!!!!!!!!!!!!!!!!!
         var values = ["text", "Font Size", "Border Width", "Border Radius", "padding", "margin"];
@@ -100,26 +101,35 @@ class CreateLogoScreen extends Component {
         }
         return true;
     }
-
-    
+    textClicked= (index)=>{
+        // 
+        this.setState({currentText:index})
+        console.log(this.state.currentText +" is the text we looking at ");
+        this.setState();
+    }
+    addNewText =()=>{
+        let copyArray = this.state.textArray;
+        copyArray.push(new NewText());
+        this.setState({textArray:copyArray, numTexts:this.state.numTexts + 1});
+    }
     render() {
 
-        const styles = {
-            container:
+        // const styles = {
+        //     container:
 
-            {
-                color: this.state.textColor,
-                fontSize: this.state.fontSize + "pt",
-                backgroundColor: this.state.backgroundColor,
-                borderColor: this.state.borderColor,
-                borderRadius: this.state.borderRadius + "px",
-                borderWidth: this.state.borderWidth + "px",
-                padding: this.state.padding + "px",
-                margin: this.state.margin + "px",
-                borderStyle: "solid"
-            }
+        //     {
+        //         color: this.state.textColor,
+        //         fontSize: this.state.fontSize + "pt",
+        //         backgroundColor: this.state.backgroundColor,
+        //         borderColor: this.state.borderColor,
+        //         borderRadius: this.state.borderRadius + "px",
+        //         borderWidth: this.state.borderWidth + "px",
+        //         padding: this.state.padding + "px",
+        //         margin: this.state.margin + "px",
+        //         borderStyle: "solid"
+        //     }
 
-        }
+        // }
 
 
 
@@ -135,6 +145,8 @@ class CreateLogoScreen extends Component {
                                 <div className="panel-heading">
                                     <h4><Link style ={{color:"black"}}to="/">Home</Link></h4>
 
+                                    <button onClick={()=> this.addNewText()} className="btn btn-primary"> ADD NEW TEXT </button>
+
                                 </div>
                             </div>
                         </nav>
@@ -142,27 +154,28 @@ class CreateLogoScreen extends Component {
                         <div className="parent" style={{ display: "flex" }}>
                             <div className="panel-body">
                                 <form name="panel_form" onSubmit={e => {
-                                    e.preventDefault();
-                                    if(this.checkInput()){
-                                        addLogo({
-                                            variables: {
-                                                text: this.state.textInput, color: this.state.textColor, backgroundColor: this.state.backgroundColor,
-                                                borderColor: this.state.borderColor, fontSize: parseInt(this.state.fontSize), borderRadius: parseInt(this.state.borderRadius),
-                                                borderWidth: parseInt(this.state.borderWidth), padding: parseInt(this.state.padding), margin: parseInt(this.state.margin)
-                                            }
-                                        });
+                                //     e.preventDefault();
+                                //     if(this.checkInput()){
+                                //         // addLogo({
+                                //         //     variables: {
+                                //         //         text: this.state.textInput, color: this.state.textColor, backgroundColor: this.state.backgroundColor,
+                                //         //         borderColor: this.state.borderColor, fontSize: parseInt(this.state.fontSize), borderRadius: parseInt(this.state.borderRadius),
+                                //         //         borderWidth: parseInt(this.state.borderWidth)
+                                //         //     }
+                                //         // });
                                     
                                    
-                                    text.value = "";
-                                    color.value = "";
-                                    backgroundColor.value = "";
-                                    borderColor.value = "";
-                                    fontSize.value = "";
-                                    borderWidth.value = "";
-                                    borderRadius.value = "";
-                                    padding.value = "";
-                                    margin.value = "";
-                                }}}>
+                                //     text.value = "";
+                                //     color.value = "";
+                                //     backgroundColor.value = "";
+                                //     borderColor.value = "";
+                                //     fontSize.value = "";
+                                //     borderWidth.value = "";
+                                //     borderRadius.value = "";
+                                //     padding.value = "";
+                                //     margin.value = "";
+                                // }
+                            }}>
                                     <div className="card red darken" style={{ backgroundColor: "red" }}>
                                         <div >
                                             <h3 className="panel-title" style={{textAlign:"center"}}>
@@ -173,56 +186,45 @@ class CreateLogoScreen extends Component {
                                             <label htmlFor="text">Text:</label>
                                             <input  style={{width:"max-content"}}type="text" className="form-control" name="text" ref={node => {
                                                 text = node;
-                                            }} defaultValue={this.state.textInput} onChange={this.updateText} />
+                                            }} defaultValue={this.state.textArray[this.state.currentText].text} onChange={this.updateText} />
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Color:</label>
                                             <input type="color" className="color_input" name="color" ref={node => {
                                                 color = node;
-                                            }} placeholder={this.state.textColor} onChange={this.ColorChange} />
+                                            }} placeholder={this.state.textArray[this.state.currentText].color} onChange={this.ColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Background Color:</label>
                                             <input type="color" className="color_input" name="backgroundColor" ref={node => {
                                                 backgroundColor = node;
-                                            }} placeholder={this.state.backgroundColor} onChange={this.BackgroundColorChange} />
+                                            }} placeholder={this.state.textArray[this.state.currentText].backgroundColor} onChange={this.BackgroundColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Border Color:</label>
                                             <input type="color" className="color_input" name="borderColor" ref={node => {
                                                 borderColor = node;
-                                            }} placeholder={this.state.borderColor} onChange={this.BorderColorChange} />
+                                            }} placeholder={this.state.textArray[this.state.currentText].borderColor} onChange={this.BorderColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="fontSize">Font Size:</label>
                                             <input min="4" max="150" type="number" className="input_sliders" name="Font Size" ref={node => {
                                                 fontSize = node;
-                                            }} defaultValue={this.state.fontSize} onChange={this.fontSizeChange} />
+                                            }} defaultValue={this.state.textArray[this.state.currentText].fontSize} onChange={this.fontSizeChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="borderWidth">Border Width:</label>
                                             <input min="0" max="250" type="number" className="input_sliders" name="Border Width" ref={node => {
                                                 borderWidth = node;
-                                            }} defaultValue={this.state.borderWidth} onChange={this.borderWidthChange} />
+                                            }} defaultValue={this.state.textArray[this.state.currentText].fontSize} onChange={this.borderWidthChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="borderRadius">Border Radius:</label>
                                             <input min="0" max="400" type="number" className="input_sliders" name="Border Radius" ref={node => {
                                                 borderRadius = node;
-                                            }} defaultValue={this.state.borderRadius} onChange={this.borderRadiusChange} />
+                                            }} defaultValue={this.state.textArray[this.state.currentText].fontSize} onChange={this.borderRadiusChange} />
                                         </div>
-                                        <div className="form-group">
-                                            <label className="sliders_lables" htmlFor="padding">Padding:</label>
-                                            <input min="0" max="250" type="number" className="input_sliders" name="padding" ref={node => {
-                                                padding = node;
-                                            }} defaultValue={this.state.padding} onChange={this.paddingChange} />
-                                        </div>
-                                        <div className="form-group">
-                                            <label className="sliders_lables" htmlFor="margin">Margin:</label>
-                                            <input min="0" max="250" type="number" className="input_sliders" name="margin" ref={node => {
-                                                margin = node;
-                                            }} defaultValue={this.state.margin} onChange={this.MarginChange} />
-                                        </div>
+                                       
                                         <button   type="submit" className="btn btn-success">Submit</button>
                                     </div>
                                 </form>
@@ -230,10 +232,15 @@ class CreateLogoScreen extends Component {
                                 {error && <p>Error :( Please try again </p>}
                             </div>
                             <div className="workspace">
-                                <pre
-                                    className="logo" style={styles.container}>
-                                    {this.state.textInput}
-                                </pre>
+                               
+                            {this.state.textArray.map((text, index)=>(
+                                                <TextComponent  
+                                                    textClicked = {this.textClicked}
+                                                    index ={index}
+                                                    text={text}                            
+                                                    // goToLogoCallback={this.props.goToLogoCallback}
+                                                    />  
+                                            ))}
 
                             </div>
 

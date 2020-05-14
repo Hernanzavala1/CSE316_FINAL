@@ -108,13 +108,15 @@ class HomeScreen extends Component {
                                         </div>
 
                                         <div>
-                                            {console.log("user id "+ data.user._id)}
-                                            <Link  to={`/user/${data.user._id}`}> 
-                                             <button type="button" class="btn btn-primary btn-block">User</button>
+                                            {console.log("user id " + data.user._id)}
+                                            <Link to={`/user/${data.user._id}`}>
+                                                <button type="button" class="btn btn-primary btn-block">User</button>
                                             </Link>
                                         </div>
                                         <div>
-                                            <button type="button" class="btn btn-primary btn-block ">Create Logo</button>
+                                            <Link to={`/create/${data.user._id}`} >
+                                                <button type="button" class="btn btn-primary btn-block ">Create Logo</button>
+                                            </Link>
                                         </div>
                                         <div>
                                             <button type="button" class="btn btn-primary btn-block ">LogOut</button>

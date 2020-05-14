@@ -21,7 +21,7 @@ ReactDOM.render(
             <div>
                 <Route exact path='/' component={HomeScreen} />
                 <Route path='/edit/:id' component={EditLogoScreen} />
-                <Route path='/create' component={CreateLogoScreen} />
+                <Route path='/create/:id' component={CreateLogoScreen} />
                 <Route path='/user/:id' component={userAccount} />
                 <Route path='/view/:id/:logoId' component={ViewLogoScreen} />
             </div>
