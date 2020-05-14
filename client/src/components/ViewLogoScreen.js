@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import {TextComponent} from '../components/TextComponent'
 
 const GET_LOGO = gql`
 
@@ -35,22 +36,7 @@ query User($userId: String, $logoId: String ){
   
 }
 `;
-// const GET_LOGO = gql`
-//     query logo($logoId: String) {
-//         logo(id: $logoId) {
-//             _id
-//             text
-//             color
-//             borderColor
-//             backgroundColor
-//             fontSize
-//             borderRadius
-//             borderWidth
-//             padding
-//             margin
-//         }
-//     }
-// `;
+
 
 const DELETE_LOGO = gql`
   mutation removeLogo($id: String!) {
@@ -62,13 +48,24 @@ const DELETE_LOGO = gql`
 
 class ViewLogoScreen extends Component {
 
+    constructor(props) {
+        super(props);
+
+        // DISPLAY WHERE WE ARE
+        this.state = {
+           currentText: 0
+        }
+    }
+  textClicked= (index)=>{
+      this.setState({currentText: index});
+  }
     componentDidMount = () => {
         console.log("this is the id :" + this.props.match.params.id);
         console.log("this is the logo id :" + this.props.match.params.logoId);
     }
 
     render() {
-
+        let textArray =[];
         
         
         return (
@@ -77,6 +74,9 @@ class ViewLogoScreen extends Component {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     let logo = data.singleLogo.Logos[0];
+                    textArray = data.singleLogo.Logos[0].Texts;
+                    console.log("the text array is :")
+                    console.log(textArray);
                         console.log("The logo is ")
                         console.log(logo);
                         console.log("the logo is above ")
@@ -109,21 +109,21 @@ class ViewLogoScreen extends Component {
                                         <dt>Text:</dt>
                                         <div className="col s8" style={{display:"inline-grid"}}>
                                             <pre  style={{overflow:"auto"}}>
-                                        <dd  >{logo.Texts[0].text}</dd>
+                                        <dd  >{logo.Texts[this.state.currentText].text}</dd>
                                         </pre>
                                           </div>   
                                         <dt>Color:</dt>
-                                        <dd>{logo.Texts[0].color}</dd>
+                                        <dd>{logo.Texts[this.state.currentText].color}</dd>
                                         <dt>borderColor:</dt>
-                                        <dd>{logo.Texts[0].borderColor}</dd>
+                                        <dd>{logo.Texts[this.state.currentText].borderColor}</dd>
                                         <dt>backgroundColor:</dt>
-                                        <dd>{logo.Texts[0].backgroundColor}</dd>
+                                        <dd>{logo.Texts[this.state.currentText].backgroundColor}</dd>
                                         <dt>Font Size:</dt>
-                                        <dd>{logo.Texts[0].fontSize}</dd>
+                                        <dd>{logo.Texts[this.state.currentText].fontSize}</dd>
                                         <dt>Border Radius:</dt>
-                                        <dd>{logo.Texts[0].borderRadius}</dd>
+                                        <dd>{logo.Texts[this.state.currentText].borderRadius}</dd>
                                         <dt>Border Width:</dt>
-                                        <dd>{logo.Texts[0].borderWidth}</dd>
+                                        <dd>{logo.Texts[this.state.currentText].borderWidth}</dd>
                                        
                                     </dl>
                                     {/* <Mutation mutation={DELETE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push('/')}>
@@ -145,20 +145,19 @@ class ViewLogoScreen extends Component {
                                     </div>
                                 </div>
                                 <div className="workspace">
+                                      
+                                            {textArray.map((text, index)=>(
+                                                <TextComponent  
+                                                    textClicked = {this.textClicked}
+                                                    index ={index}
+                                                    text={text}                            
+                                                    // goToLogoCallback={this.props.goToLogoCallback}
+                                                    />  
+                                            ))}
+                                           
+                                
 
-                                    <pre
-                                        className="logo" style={{
-                                            // backgroundColor: data.logo.backgroundColor,
-                                            // fontSize: data.logo.fontSize,
-                                            // borderColor: data.logo.borderColor,
-                                            // borderRadius: data.logo.borderRadius,
-                                            // borderWidth: data.logo.borderWidth,
-                                            // color: data.logo.color, borderStyle: "solid"
-                                        }}
-                                    >
-
-                                        {logo.Texts[0].text}
-                                    </pre>
+                                 
 
                                 </div>
                             </div>
