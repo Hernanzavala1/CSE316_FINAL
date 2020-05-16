@@ -138,6 +138,12 @@ var LogosInput = new GraphQLInputObjectType({
       },
       borderRadius: {
         type: GraphQLInt
+      },
+      padding: {
+        type: GraphQLInt
+      },
+      margin: {
+        type: GraphQLInt
       }
     }
   }
@@ -173,6 +179,12 @@ var Logos = new GraphQLObjectType({
         type: GraphQLInt
       },
       borderRadius: {
+        type: GraphQLInt
+      },
+      padding: {
+        type: GraphQLInt
+      },
+      margin: {
         type: GraphQLInt
       }
     }
@@ -284,7 +296,7 @@ var queryType = new GraphQLObjectType({
           if (!userLogo) {
             throw new Error('Error')
           }
-          return userLogo
+          return userLogo 
 
         }
       }
@@ -362,6 +374,13 @@ var mutation = new GraphQLObjectType({
           height: {
             type: GraphQLInt
           },
+              
+          padding: {
+            type: GraphQLInt
+          },
+          margin: {
+            type: GraphQLInt
+          },
           imageWidth: {
             type: GraphQLInt
           },
@@ -376,11 +395,11 @@ var mutation = new GraphQLObjectType({
               $push: {
                 Logos: {
                   Texts: {
-                    text: params.text, fontSize: params.fontSize, color: params.color
-                  },
+                    text: params.text, fontSize: params.fontSize, color: params.color },
                   images: { imageURL: params.imageURL, imageWidth: params.imageWidth, imageHeight: params.imageHeight },
                   width: params.width, height: params.height, backgroundColor: params.backgroundColor,
-                  borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius
+                  borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius, padding: params.padding, 
+                  margin: params.margin
                 }
               }
             });

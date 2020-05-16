@@ -45,7 +45,17 @@ class CreateLogoScreen extends Component {
             textArray : [new NewText()], 
             currentText : 0, 
             numTexts : 1,
-            update: false
+            update: false,
+            // lOGO CANVAS STYLING PROPERTIES
+            backgroundColor:"#e8b072" ,
+            borderColor: "#84254a",
+            borderRadius:10,
+            borderWidth: 11, 
+            width: 50,
+            height: 50,
+            padding : 0,
+            margin :0
+
         }
 
 
@@ -56,9 +66,25 @@ class CreateLogoScreen extends Component {
         this.setState({textArray:array});
       //  this.state.textArray.push(new NewText());
     }
+    
     updateText = (event) => {
-        this.setState({ textInput: event.target.value })
-        console.log(" the value of the text is : " + event.target.value)
+    // this.changeText();
+
+    let copyOfTextArr= [] ;
+    Object.assign(copyOfTextArr, this.state.textArray);
+    copyOfTextArr[this.state.currentText].text = event.target.value;
+    this.setState({textArray:copyOfTextArr  });
+    this.setState({update:false});
+      
+       // this.setState({update: false , textArray:copy  })
+        //this.setState({ textInput: event.target.value })
+        console.log(" the value of the text is : " + this.state.textArray[this.state.currentText].text)
+    }
+    widthChange = (event) => {
+        this.setState({ width: event.target.value })
+    }
+    heightChange = (event) => {
+        this.setState({ height: event.target.value })
     }
     ColorChange = (event) => {
         this.setState({ textColor: event.target.value })
@@ -107,8 +133,10 @@ class CreateLogoScreen extends Component {
     }
     textClicked= (index)=>{
         // 
+
         this.setState({currentText:index}, ()=> {
             console.log(this.state.currentText +" is the text we looking at ");
+           document.getElementById("TextInp").value = this.state.textArray[this.state.currentText].text;
             this.render();
         })
      //   console.log(this.state.currentText +" is the text we looking at ");
@@ -120,9 +148,22 @@ class CreateLogoScreen extends Component {
         this.setState({textArray:copyArray, numTexts:this.state.numTexts + 1});
     }
     render() {
+        const styles = {
+            container: {
+               
+                backgroundColor: this.state.backgroundColor,
+                borderColor: this.state.borderColor,
+                borderRadius:this.state.borderRadius + "px",
+                borderWidth: this.state.borderWidth + "px", 
+                width: this.state.width + "px",
+                height: this.state.height + "px",
+                padding : this.state.padding + "px",
+                margin :this.state.margin + "px",
+                borderStyle: "solid"
+            }
+        }
 
-
-        let text, color, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, fontSize;
+      let text, color, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, fontSize;
         return (
             <Mutation mutation={ADD_LOGO} onCompleted={() => this.props.history.push('/')}>
                 {(addLogo, { loading, error }) => (
@@ -171,7 +212,7 @@ class CreateLogoScreen extends Component {
                                         </div>
                                         <div className="form-group" >
                                             <label htmlFor="text">Text:</label>
-                                            <input  style={{width:"max-content"}}type="text" className="form-control" name="text" ref={node => {
+                                            <input id ="TextInp" style={{width:"max-content"}}type="text" className="form-control" name="text" ref={node => {
                                                 text = node;
                                             }} defaultValue={this.state.textArray[this.state.currentText].text} onChange={this.updateText} />
                                         </div>
@@ -192,6 +233,18 @@ class CreateLogoScreen extends Component {
                                             <input type="color" className="color_input" name="borderColor" ref={node => {
                                                 borderColor = node;
                                             }} placeholder={this.state.textArray[this.state.currentText].borderColor} onChange={this.BorderColorChange} />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="sliders_lables" htmlFor="fontSize">Width:</label>
+                                            <input min="4" max="150" type="number" className="input_sliders" name="width" ref={node => {
+                                                fontSize = node;
+                                            }} defaultValue={this.state.textArray[this.state.currentText].width} onChange={this.widthChange} />
+                                        </div>
+                                        <div className="form-group">
+                                            <label className="sliders_lables" htmlFor="fontSize">Height:</label>
+                                            <input min="4" max="150" type="number" className="input_sliders" name="height" ref={node => {
+                                                fontSize = node;
+                                            }} defaultValue={this.state.textArray[this.state.currentText].height}  onChange={this.heightChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="fontSize">Font Size:</label>
@@ -219,7 +272,7 @@ class CreateLogoScreen extends Component {
                                 {error && <p>Error :( Please try again </p>}
                             </div>
                             <div className="workspace">
-                               <div className=" Logo" >
+                               <div className=" Logo" style={styles.container}>
                             {this.state.textArray.map((text, index)=>(
                                                 <TextComponent  
                                                     textClicked = {this.textClicked}
@@ -228,6 +281,7 @@ class CreateLogoScreen extends Component {
                                                     // goToLogoCallback={this.props.goToLogoCallback}
                                                     />  
                                             ))}
+                                            
                                     </div>
                             </div>
 

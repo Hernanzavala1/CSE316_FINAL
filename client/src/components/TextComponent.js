@@ -15,13 +15,13 @@ export class TextComponent extends Component {
             // borderWidth: this.props.logo.borderWidth,
             // tempString: "",
             // textInput: this.props.logo.text
-            text : this.props.text.text,
+       
             index : this.props.index
         }
     }
 
     TextClicked =(e)=>{
-           
+           console.log(this.state.text);
             this.props.textClicked(this.state.index);
     }
   
@@ -31,11 +31,7 @@ export class TextComponent extends Component {
             container: {
                 color: this.props.text.color,
                 fontSize: this.props.text.fontSize + "pt",
-                // backgroundColor: this.props.text.backgroundColor,
-                // borderColor: this.props.text.borderColor,
-                // borderRadius: this.props.text.borderRadius + "px",
-                // borderWidth: this.props.text.borderWidth + "px",
-                // borderStyle: "solid",
+            
     
 
             }
@@ -47,7 +43,7 @@ export class TextComponent extends Component {
                 className='text' style={styles.container}                
               
             >
-               {this.state.text} 
+               {this.props.text.text} 
             </pre>
         )
     }

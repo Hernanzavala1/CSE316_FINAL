@@ -26,6 +26,8 @@ var UserSchema = new mongoose.Schema({
            borderColor: String,
            borderWidth: {type: Number, min: 0, max: 100},
            borderRadius: {type: Number, min: 0, max: 100},
+           padding: {type: Number, min: 0, max: 100},
+           margin:  {type: Number, min: 0, max: 100}
            
     }]
     

@@ -31,6 +31,8 @@ query User($userId: String, $logoId: String ){
                     borderColor
                     borderWidth
                     borderRadius
+                    padding
+                    margin
 
             }
         
