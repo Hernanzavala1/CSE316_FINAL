@@ -11,10 +11,6 @@ var UserSchema = new mongoose.Schema({
                id: String,
                 fontSize: {type: Number, min: 2, max: 100},
                 color: String,
-                backgroundColor: String,
-                borderColor: String,
-                borderWidth: {type: Number, min: 0, max: 100},
-                borderRadius: {type: Number, min: 0, max: 100},
                 text: String
              }],
              images: [{
@@ -25,7 +21,11 @@ var UserSchema = new mongoose.Schema({
                 
            }],
            width: {type: Number, min: 0, max: 100},
-           height: {type: Number, min: 0, max: 100}
+           height: {type: Number, min: 0, max: 100},
+           backgroundColor: String,
+           borderColor: String,
+           borderWidth: {type: Number, min: 0, max: 100},
+           borderRadius: {type: Number, min: 0, max: 100},
            
     }]
     

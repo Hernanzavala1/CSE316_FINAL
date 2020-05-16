@@ -71,18 +71,6 @@ var TextsInput = new GraphQLInputObjectType({
       color: {
         type: GraphQLString
       },
-      backgroundColor: {
-        type: GraphQLString
-      },
-      borderColor: {
-        type: GraphQLString
-      },
-      borderWidth: {
-        type: GraphQLInt
-      },
-      borderRadius: {
-        type: GraphQLInt
-      },
       text: {
         type: GraphQLString
       }
@@ -111,23 +99,9 @@ var Texts = new GraphQLObjectType({
       color: {
         type: GraphQLString
       },
-      backgroundColor: {
-        type: GraphQLString
-      },
-      borderColor: {
-        type: GraphQLString
-      },
-      borderWidth: {
-        type: GraphQLInt
-      },
-      borderRadius: {
-        type: GraphQLInt
-      },
       text: {
         type: GraphQLString
       }
-
-
 
 
     }
@@ -152,6 +126,18 @@ var LogosInput = new GraphQLInputObjectType({
       },
       height: {
         type: GraphQLInt
+      },
+      backgroundColor: {
+        type: GraphQLString
+      },
+      borderColor: {
+        type: GraphQLString
+      },
+      borderWidth: {
+        type: GraphQLInt
+      },
+      borderRadius: {
+        type: GraphQLInt
       }
     }
   }
@@ -175,6 +161,18 @@ var Logos = new GraphQLObjectType({
         type: GraphQLInt
       },
       height: {
+        type: GraphQLInt
+      },
+      backgroundColor: {
+        type: GraphQLString
+      },
+      borderColor: {
+        type: GraphQLString
+      },
+      borderWidth: {
+        type: GraphQLInt
+      },
+      borderRadius: {
         type: GraphQLInt
       }
     }
@@ -273,7 +271,7 @@ var queryType = new GraphQLObjectType({
             name: 'id',
             type: GraphQLString
           },
-          logoId: {
+          logoId: { 
             name: 'LogoId',
             type: GraphQLString
           }
@@ -378,11 +376,11 @@ var mutation = new GraphQLObjectType({
               $push: {
                 Logos: {
                   Texts: {
-                    text: params.text, fontSize: params.fontSize, color: params.color, backgroundColor: params.backgroundColor,
-                    borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius
+                    text: params.text, fontSize: params.fontSize, color: params.color
                   },
                   images: { imageURL: params.imageURL, imageWidth: params.imageWidth, imageHeight: params.imageHeight },
-                  width: params.width, height: params.height
+                  width: params.width, height: params.height, backgroundColor: params.backgroundColor,
+                  borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius
                 }
               }
             });
@@ -407,18 +405,6 @@ var mutation = new GraphQLObjectType({
           },
           color: {
             type: GraphQLString
-          },
-          backgroundColor: {
-            type: GraphQLString
-          },
-          borderColor: {
-            type: GraphQLString
-          },
-          borderWidth: {
-            type: GraphQLInt
-          },
-          borderRadius: {
-            type: GraphQLInt
           },
           text: {
             type: GraphQLString

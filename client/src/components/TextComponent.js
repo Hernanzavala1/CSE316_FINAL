@@ -31,11 +31,11 @@ export class TextComponent extends Component {
             container: {
                 color: this.props.text.color,
                 fontSize: this.props.text.fontSize + "pt",
-                backgroundColor: this.props.text.backgroundColor,
-                borderColor: this.props.text.borderColor,
-                borderRadius: this.props.text.borderRadius + "px",
-                borderWidth: this.props.text.borderWidth + "px",
-                borderStyle: "solid",
+                // backgroundColor: this.props.text.backgroundColor,
+                // borderColor: this.props.text.borderColor,
+                // borderRadius: this.props.text.borderRadius + "px",
+                // borderWidth: this.props.text.borderWidth + "px",
+                // borderStyle: "solid",
     
 
             }

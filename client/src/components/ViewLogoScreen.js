@@ -18,10 +18,6 @@ query User($userId: String, $logoId: String ){
                 Texts{
                     fontSize
                     color
-                    backgroundColor 
-                    borderColor
-                    borderWidth
-                    borderRadius
                     text
                 }
                 images{
@@ -29,6 +25,12 @@ query User($userId: String, $logoId: String ){
                     imageWidth
                     imageHeight
                 }
+                    width
+                    height
+                    backgroundColor 
+                    borderColor
+                    borderWidth
+                    borderRadius
 
             }
         

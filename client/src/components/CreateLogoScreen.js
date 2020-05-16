@@ -70,9 +70,13 @@ class CreateLogoScreen extends Component {
         this.setState({ borderColor: event.target.value })
     }
     fontSizeChange = (event) => {
-        console.log(event.target.value)
+        console.log("old object is :")
+        console.log( this.state.textArray[this.state.currentText]);
+       // console.log(event.target.value)
         this.setState({update:true});
         this.state.textArray[this.state.currentText].fontSize = event.target.value;
+        console.log("new object is :")
+        console.log( this.state.textArray[this.state.currentText]);
         this.setState({update:false});
         
     }
@@ -103,9 +107,12 @@ class CreateLogoScreen extends Component {
     }
     textClicked= (index)=>{
         // 
-        this.setState({currentText:index})
-        console.log(this.state.currentText +" is the text we looking at ");
-        this.setState();
+        this.setState({currentText:index}, ()=> {
+            console.log(this.state.currentText +" is the text we looking at ");
+            this.render();
+        })
+     //   console.log(this.state.currentText +" is the text we looking at ");
+       // this.setState(); // idk about this?
     }
     addNewText =()=>{
         let copyArray = this.state.textArray;
@@ -113,26 +120,6 @@ class CreateLogoScreen extends Component {
         this.setState({textArray:copyArray, numTexts:this.state.numTexts + 1});
     }
     render() {
-
-        // const styles = {
-        //     container:
-
-        //     {
-        //         color: this.state.textColor,
-        //         fontSize: this.state.fontSize + "pt",
-        //         backgroundColor: this.state.backgroundColor,
-        //         borderColor: this.state.borderColor,
-        //         borderRadius: this.state.borderRadius + "px",
-        //         borderWidth: this.state.borderWidth + "px",
-        //         padding: this.state.padding + "px",
-        //         margin: this.state.margin + "px",
-        //         borderStyle: "solid"
-        //     }
-
-        // }
-
-
-
 
 
         let text, color, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, fontSize;
@@ -232,7 +219,7 @@ class CreateLogoScreen extends Component {
                                 {error && <p>Error :( Please try again </p>}
                             </div>
                             <div className="workspace">
-                               
+                               <div className=" Logo" >
                             {this.state.textArray.map((text, index)=>(
                                                 <TextComponent  
                                                     textClicked = {this.textClicked}
@@ -241,7 +228,7 @@ class CreateLogoScreen extends Component {
                                                     // goToLogoCallback={this.props.goToLogoCallback}
                                                     />  
                                             ))}
-
+                                    </div>
                             </div>
 
                         </div>
