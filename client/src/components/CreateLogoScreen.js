@@ -87,7 +87,10 @@ class CreateLogoScreen extends Component {
         this.setState({ height: event.target.value })
     }
     ColorChange = (event) => {
-        this.setState({ textColor: event.target.value })
+        //this.setState({ textColor: event.target.value })
+        this.setState({update:true});
+        this.state.textArray[this.state.currentText].color = event.target.value;
+        this.setState({update:false});
     }
     BackgroundColorChange = (event) => {
         this.setState({ backgroundColor: event.target.value })
@@ -131,12 +134,33 @@ class CreateLogoScreen extends Component {
         }
         return true;
     }
+    LogoClicked = ()=>{
+        document.getElementById("ColorInp").disabled = true; 
+        document.getElementById("textFontSize").disabled = true;
+        // enable logo properties 
+        document.getElementById("BackgroundColor").disabled = false;
+            document.getElementById("BorderColor").disabled = false;
+            document.getElementById("BorderRadius").disabled = false;
+            document.getElementById("BorderWidth").disabled = false;
+            document.getElementById("LogoHeight").disabled = false;
+            document.getElementById("LogoWidth").disabled = false;
+
+    }
     textClicked= (index)=>{
         // 
-
+        
         this.setState({currentText:index}, ()=> {
             console.log(this.state.currentText +" is the text we looking at ");
            document.getElementById("TextInp").value = this.state.textArray[this.state.currentText].text;
+           document.getElementById("ColorInp").disabled = false; 
+            document.getElementById("textFontSize").disabled = false;
+            // disable properties for the logo itself
+            document.getElementById("BackgroundColor").disabled = true;
+            document.getElementById("BorderColor").disabled = true;
+            document.getElementById("BorderRadius").disabled = true;
+            document.getElementById("BorderWidth").disabled = true;
+            document.getElementById("LogoHeight").disabled = true;
+            document.getElementById("LogoWidth").disabled = true;
             this.render();
         })
      //   console.log(this.state.currentText +" is the text we looking at ");
@@ -218,49 +242,49 @@ class CreateLogoScreen extends Component {
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Color:</label>
-                                            <input type="color" className="color_input" name="color" ref={node => {
+                                            <input id ="ColorInp" type="color" className="color_input" name="color" ref={node => {
                                                 color = node;
                                             }} placeholder={this.state.textArray[this.state.currentText].color} onChange={this.ColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Background Color:</label>
-                                            <input type="color" className="color_input" name="backgroundColor" ref={node => {
+                                            <input id="BackgroundColor" type="color" className="color_input" name="backgroundColor" ref={node => {
                                                 backgroundColor = node;
                                             }} placeholder={this.state.textArray[this.state.currentText].backgroundColor} onChange={this.BackgroundColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Border Color:</label>
-                                            <input type="color" className="color_input" name="borderColor" ref={node => {
+                                            <input id="BorderColor" type="color" className="color_input" name="borderColor" ref={node => {
                                                 borderColor = node;
                                             }} placeholder={this.state.textArray[this.state.currentText].borderColor} onChange={this.BorderColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="fontSize">Width:</label>
-                                            <input min="4" max="150" type="number" className="input_sliders" name="width" ref={node => {
+                                            <input id="LogoWidth" min="4" max="150" type="number" className="input_sliders" name="width" ref={node => {
                                                 fontSize = node;
                                             }} defaultValue={this.state.textArray[this.state.currentText].width} onChange={this.widthChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="fontSize">Height:</label>
-                                            <input min="4" max="150" type="number" className="input_sliders" name="height" ref={node => {
+                                            <input id="LogoHeight" min="4" max="150" type="number" className="input_sliders" name="height" ref={node => {
                                                 fontSize = node;
                                             }} defaultValue={this.state.textArray[this.state.currentText].height}  onChange={this.heightChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="fontSize">Font Size:</label>
-                                            <input min="4" max="150" type="number" className="input_sliders" name="Font Size" ref={node => {
+                                            <input id ="textFontSize" min="4" max="150" type="number" className="input_sliders" name="Font Size" ref={node => {
                                                 fontSize = node;
                                             }} defaultValue={this.state.textArray[this.state.currentText].fontSize} onChange={this.fontSizeChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="borderWidth">Border Width:</label>
-                                            <input min="0" max="250" type="number" className="input_sliders" name="Border Width" ref={node => {
+                                            <input id="BorderWidth" min="0" max="250" type="number" className="input_sliders" name="Border Width" ref={node => {
                                                 borderWidth = node;
                                             }} defaultValue={this.state.textArray[this.state.currentText].fontSize} onChange={this.borderWidthChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="borderRadius">Border Radius:</label>
-                                            <input min="0" max="400" type="number" className="input_sliders" name="Border Radius" ref={node => {
+                                            <input id="BorderRadius" min="0" max="400" type="number" className="input_sliders" name="Border Radius" ref={node => {
                                                 borderRadius = node;
                                             }} defaultValue={this.state.textArray[this.state.currentText].fontSize} onChange={this.borderRadiusChange} />
                                         </div>
@@ -272,7 +296,7 @@ class CreateLogoScreen extends Component {
                                 {error && <p>Error :( Please try again </p>}
                             </div>
                             <div className="workspace">
-                               <div className=" Logo" style={styles.container}>
+                               <div id ="Logo" onClick={this.LogoClicked} className=" Logo" style={styles.container}>
                             {this.state.textArray.map((text, index)=>(
                                                 <TextComponent  
                                                     textClicked = {this.textClicked}
