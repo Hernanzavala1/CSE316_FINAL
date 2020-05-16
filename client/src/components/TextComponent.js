@@ -30,10 +30,10 @@ export class TextComponent extends Component {
         const styles = {
             container: {
                 color: this.props.text.color,
-                fontSize: this.props.text.fontSize + "pt",
-            
-    
-
+                fontSize: this.props.text.fontSize + "px",
+                marginLeft: "10px",
+                height: "max-content",
+                width: "max-content"
             }
         }
      

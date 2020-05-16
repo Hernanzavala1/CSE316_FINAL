@@ -55,9 +55,10 @@ border-style: solid;
 border-radius: 10px;
 }
 .workspace{
-  width: 50%;
-  margin-left: 5%;
+  width: 98%;
+  margin-left: 10%;
   overflow: scroll;
+  display: flex;
 }
 .logo{
   width: fit-content;
