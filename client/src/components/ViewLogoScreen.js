@@ -71,9 +71,9 @@ class ViewLogoScreen extends Component {
     imageClicked =( id)=>{
         console.log(id); // set variable in state for current image clicked.
         this.setState({currentImage : id}, ()=>{
-            document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
-         document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
-       document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
+    //         document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
+    //      document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
+    //    document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
         });
 
     }
