@@ -21,7 +21,7 @@ export class TextComponent extends Component {
     }
 
     TextClicked =(e)=>{
-           console.log(this.state.text);
+          
             this.props.textClicked(this.state.index);
     }
   
