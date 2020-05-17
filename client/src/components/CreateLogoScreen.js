@@ -45,6 +45,7 @@ class CreateLogoScreen extends Component {
 
         this.state = {
             textArray: [new NewText()],
+            imageArray : [new Image()],
             currentText: 0,
             numTexts: 1,
             update: false,
@@ -212,6 +213,9 @@ class CreateLogoScreen extends Component {
         copyArray.push(new NewText());
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts + 1 });
     }
+    AddImage =()=>{
+
+    }
     switchTabs =(evt) => {
         console.log("we clicking")
         console.log(evt.target.name);
@@ -253,10 +257,11 @@ class CreateLogoScreen extends Component {
                             <div className="nav-wrapper">
                                 <div className="panel-heading">
                                     <h4><Link style={{ color: "black" }} to="/">Home</Link></h4>
-                                    {/* <div >
-                                            <button onClick={() => this.addNewText()} className="btn btn-primary"> ADD NEW TEXT </button>
-                                            <button onClick={() => this.deleteText()} className="btn btn-primary"> Delete Text </button>
-                                        </div> */}
+                                    <div >
+                                            <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
+                                            <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
+                                            <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                     </div>
                                 </div>
                             </div>
                         </nav>
@@ -274,21 +279,21 @@ class CreateLogoScreen extends Component {
 
                                         <div >
                                             <h3 className="panel-title" style={{ textAlign: "center" }}>
-                                                Create Logo
+                                                Create Image
                                             </h3>
                                         </div>
                                     
                                         <div className="form-group" >
-                                            <label htmlFor="text">Text:</label>
-                                            <input  style={{ width: "max-content" }} type="text" className="form-control" name="text"/>
+                                            <label htmlFor="text">Image URL:</label>
+                                            <input  style={{ width: "max-content" }} type="text" className="form-control" name="imageURL"/>
                                         </div>
                                         <div className="form-group">
-                                            <label className="colorInputLabel" htmlFor="color">Color:</label>
-                                            <input type="color" className="color_input" name="color" />
+                                            <label className="imageWidth" htmlFor="color">Image Width:</label>
+                                            <input type="number" className="imageWidth" name="imageWidth" />
                                         </div>
                                         <div className="form-group">
-                                            <label className="colorInputLabel" htmlFor="color">Background Color:</label>
-                                            <input  type="color" className="color_input" name="backgroundColor" />
+                                        <label className="imageHeight" htmlFor="color">Image Height:</label>
+                                            <input type="number" className="imageHeight" name="imageHeight" />
                                         </div>
                                         <button type="submit" className="btn btn-success">Submit</button>
                                     </div>
@@ -330,10 +335,7 @@ class CreateLogoScreen extends Component {
                                                 Create Logo
                                             </h3>
                                         </div>
-                                        <div >
-                                            <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
-                                            <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
-                                        </div>
+                                       
                                        
                                         <div className="form-group" >
                                             <label htmlFor="text">Text:</label>
