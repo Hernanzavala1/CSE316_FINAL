@@ -39,7 +39,7 @@ class HomeScreen extends Component {
 
                     console.log(data.user._id)
 
-                    console.log(Logos[0].Texts[0].text);
+                   // console.log(Logos[0].Texts[0].text);
                     // data.logos.sort((a,b)=> (a.lastUpdate < b.lastUpdate)? 1: -1);
                     // for( let i =0 ;i < data.logos.length; i++){
                     //     if(data.logos[i].text.length > 25){

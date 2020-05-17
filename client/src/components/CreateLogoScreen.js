@@ -256,6 +256,10 @@ class CreateLogoScreen extends Component {
                             <div className="nav-wrapper">
                                 <div className="panel-heading">
                                     <h4><Link style={{ color: "black" }} to="/">Home</Link></h4>
+                                    <div >
+                                            <button onClick={() => this.addNewText()} className="btn btn-primary"> ADD NEW TEXT </button>
+                                            <button onClick={() => this.deleteText()} className="btn btn-primary"> Delete Text </button>
+                                        </div>
                                 </div>
                             </div>
                         </nav>
@@ -276,10 +280,7 @@ class CreateLogoScreen extends Component {
                                                 Create Logo
                                             </h3>
                                         </div>
-                                        <div >
-                                            <button onClick={() => this.addNewText()} className="btn btn-primary"> ADD NEW TEXT </button>
-                                            <button onClick={() => this.deleteText()} className="btn btn-primary"> Delete Text </button>
-                                        </div>
+                                    
                                         <div className="form-group" >
                                             <label htmlFor="text">Text:</label>
                                             <input id="TextInp" style={{ width: "max-content" }} type="text" className="form-control" name="text" ref={node => {
