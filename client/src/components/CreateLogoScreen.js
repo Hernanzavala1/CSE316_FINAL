@@ -215,17 +215,14 @@ class CreateLogoScreen extends Component {
     switchTabs =(evt) => {
         console.log("we clicking")
         console.log(evt.target.name);
-        // var i, tabcontent, tablinks;
-        // tabcontent = document.getElementsByClassName("tabcontent");
-        // for (i = 0; i < tabcontent.length; i++) {
-        //   tabcontent[i].style.display = "none";
-        // }
-        // tablinks = document.getElementsByClassName("tablinks");
-        // for (i = 0; i < tablinks.length; i++) {
-        //   tablinks[i].className = tablinks[i].className.replace(" active", "");
-        // }
-        // document.getElementById(cityName).style.display = "block";
-        // evt.currentTarget.className += " active";
+        switch(evt.target.name){
+           case "Logo": 
+           document.getElementById("panel_form_Logo").style.display ="initial"
+           document.getElementById("panel_form_image").style.display ="none";break;
+           case "Image": 
+           document.getElementById("panel_form_Logo").style.display ="none"
+           document.getElementById("panel_form_image").style.display ="initial"
+            ; break;     }
       }
     render() {
         const styles = {
@@ -256,10 +253,10 @@ class CreateLogoScreen extends Component {
                             <div className="nav-wrapper">
                                 <div className="panel-heading">
                                     <h4><Link style={{ color: "black" }} to="/">Home</Link></h4>
-                                    <div >
+                                    {/* <div >
                                             <button onClick={() => this.addNewText()} className="btn btn-primary"> ADD NEW TEXT </button>
                                             <button onClick={() => this.deleteText()} className="btn btn-primary"> Delete Text </button>
-                                        </div>
+                                        </div> */}
                                 </div>
                             </div>
                         </nav>
@@ -268,11 +265,11 @@ class CreateLogoScreen extends Component {
 
                             <div className="panel-body">
                                 <div class="tab">
-                                    <button name="Logo" class="tablinks" onclick={(e) => this.switchTabs}>Logo</button>
-                                    <button name ="Image" class="tablinks" onclick={(e) => this.switchTabs}>Image</button>
+                                    <button name="Logo" class="tablinks" onClick={ this.switchTabs}>Logo</button>
+                                    <button name ="Image" class="tablinks" onClick={ this.switchTabs}>Image</button>
                         
                                 </div>
-                                <form style={{ display: "none" }} id="panel_form_image ">
+                                <form style={{ display: "none" }} id="panel_form_image">
                                     <div className="card red darken" style={{ backgroundColor: "red" }}>
 
                                         <div >
@@ -283,26 +280,20 @@ class CreateLogoScreen extends Component {
                                     
                                         <div className="form-group" >
                                             <label htmlFor="text">Text:</label>
-                                            <input id="TextInp" style={{ width: "max-content" }} type="text" className="form-control" name="text" ref={node => {
-                                                text = node;
-                                            }} onChange={this.updateText} />
+                                            <input  style={{ width: "max-content" }} type="text" className="form-control" name="text"/>
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Color:</label>
-                                            <input id="ColorInp" type="color" className="color_input" name="color" ref={node => {
-                                                color = node;
-                                            }} onChange={this.ColorChange} />
+                                            <input type="color" className="color_input" name="color" />
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Background Color:</label>
-                                            <input id="BackgroundColor" type="color" className="color_input" name="backgroundColor" ref={node => {
-                                                backgroundColor = node;
-                                            }} placeholder={this.state.backgroundColor} onChange={this.BackgroundColorChange} />
+                                            <input  type="color" className="color_input" name="backgroundColor" />
                                         </div>
                                         <button type="submit" className="btn btn-success">Submit</button>
                                     </div>
                                 </form>
-                                <form name="panel_form" id="panel_form" onSubmit={e => {
+                                <form name="panel_form" id="panel_form_Logo" onSubmit={e => {
                                     e.preventDefault();
                                     let copyArr = [];
                                     this.state.textArray.map((text) => {
@@ -340,9 +331,10 @@ class CreateLogoScreen extends Component {
                                             </h3>
                                         </div>
                                         <div >
-                                            <button onClick={() => this.addNewText()} className="btn btn-primary"> ADD NEW TEXT </button>
-                                            <button onClick={() => this.deleteText()} className="btn btn-primary"> Delete Text </button>
+                                            <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
+                                            <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
                                         </div>
+                                       
                                         <div className="form-group" >
                                             <label htmlFor="text">Text:</label>
                                             <input id="TextInp" style={{ width: "max-content" }} type="text" className="form-control" name="text" ref={node => {
