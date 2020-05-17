@@ -6,6 +6,7 @@ import { parse } from 'graphql';
 import { TextComponentCreate } from '../components/TextComponentCreate'
 import { TextComponent } from '../components/TextComponent'
 import { NewText } from './NewText';
+import {LogoImage} from './LogoImage'
 const UserAddLogo = gql`
     mutation UserAddLogo(
         $userId : String!
@@ -18,6 +19,7 @@ const UserAddLogo = gql`
         $width : Int!,
         $height : Int!,
         $TextsArray : [textInput]
+        $ImageArr : [imageInput]
         ) {
             UserAddLogo(
             userId: $userId,
@@ -30,6 +32,7 @@ const UserAddLogo = gql`
             width : $width,
             height : $height,
             TextsArray: $TextsArray
+            ImageArr: $ImageArr
            ) {
             _id
         }
@@ -45,8 +48,9 @@ class CreateLogoScreen extends Component {
 
         this.state = {
             textArray: [new NewText()],
-            imageArray : [new Image()],
+            imageArray : [],
             currentText: 0,
+            currentImage:0, 
             numTexts: 1,
             update: false,
             // lOGO CANVAS STYLING PROPERTIES
@@ -141,64 +145,46 @@ class CreateLogoScreen extends Component {
     MarginChange = (event) => {
         this.setState({ margin: event.target.value })
     }
-    checkInput = () => {
-        // this is where i can check the input of the text !!!!!!!!!!!!!!!!!!
-        var values = ["text", "Font Size", "Border Width", "Border Radius", "padding", "margin"];
-        let logo_name = document.forms["panel_form"].elements["text"].value
-
-        if (logo_name.trim().length === 0) {
-            alert("Cannot have blank logo names");
-            return false;
-        }
-        for (let i = 0; i < values.length; i++) {
-            var content = document.forms["panel_form"].elements[values[i]].value;
-            if (content === "") {
-                alert(values[i] + " is empty");
-                return false;
-            }
-        }
-        return true;
-    }
+    
     LogoClicked = () => {
-        document.getElementById("ColorInp").disabled = true;
-        document.getElementById("textFontSize").disabled = true;
-        document.getElementById("TextInp").disabled = true;
-        // enable logo properties 
-        document.getElementById("BackgroundColor").disabled = false;
-        document.getElementById("BorderColor").disabled = false;
-        document.getElementById("BorderRadius").disabled = false;
-        document.getElementById("BorderWidth").disabled = false;
-        document.getElementById("LogoHeight").disabled = false;
-        document.getElementById("LogoWidth").disabled = false;
-        document.getElementById("paddingInp").disabled = false;
-        document.getElementById("marginInp").disabled = false;
 
+        this.disableTextProperties(true);
+        // enable logo properties
+        this.disableLogoProperties(false); 
+;
+
+    }
+    disableLogoProperties =(value)=>{
+        document.getElementById("BackgroundColor").disabled = value;
+            document.getElementById("BorderColor").disabled = value;
+            document.getElementById("BorderRadius").disabled = value;
+            document.getElementById("BorderWidth").disabled = value;
+            document.getElementById("LogoHeight").disabled = value;
+            document.getElementById("LogoWidth").disabled = value;
+            document.getElementById("paddingInp").disabled = value;
+            document.getElementById("marginInp").disabled = value;
+    }
+    disableTextProperties = (value)=>{
+        document.getElementById("TextInp").disabled = value;
+        document.getElementById("ColorInp").disabled = value;
+        document.getElementById("textFontSize").disabled = value;
     }
     textClicked = (index) => {
         // 
 
         this.setState({ currentText: index }, () => {
             console.log(this.state.currentText + " is the text we looking at ");
-            document.getElementById("TextInp").disabled = false;
-            document.getElementById("ColorInp").disabled = false;
-            document.getElementById("textFontSize").disabled = false;
+            //enable text properties
+            this.disableTextProperties(false);
             // re populate the values in the inputs with the correct ones
             document.getElementById("TextInp").value = this.state.textArray[this.state.currentText].text;
             document.getElementById("textFontSize").value = this.state.textArray[this.state.currentText].fontSize;
             document.getElementById("ColorInp").value = this.state.textArray[this.state.currentText].color;
             // disable properties for the logo itself
-            document.getElementById("BackgroundColor").disabled = true;
-            document.getElementById("BorderColor").disabled = true;
-            document.getElementById("BorderRadius").disabled = true;
-            document.getElementById("BorderWidth").disabled = true;
-            document.getElementById("LogoHeight").disabled = true;
-            document.getElementById("LogoWidth").disabled = true;
-            document.getElementById("paddingInp").disabled = true;
-            document.getElementById("marginInp").disabled = true;
+            this.disableLogoProperties(true);
             this.render();
         })
-        //   console.log(this.state.currentText +" is the text we looking at ");
-        // this.setState(); // idk about this?
+
     }
     deleteText = () => {
         let copyArray = [];
@@ -214,8 +200,45 @@ class CreateLogoScreen extends Component {
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts + 1 });
     }
     AddImage =()=>{
+        let copyArray = this.state.imageArray;
+        // get values from the inputs
+        let imageURL = document.getElementById("imageSrc").value;
+        let height = document.getElementById("imageHeight").value;
+        let width = document.getElementById("imageWidth").value;
+        console.log("src is "+ imageURL+ " height "+ height+ " width :"+ width);
+       // console.log(this.imageExists(imageURL));
+       if(imageURL==""|| height ==""|| width==""){
+           console.log("blank shit")
+           return;
+       }
+        copyArray.push(new LogoImage(imageURL, height , width));
+        this.setState({ imageArray: copyArray },()=>{
+            document.getElementById("imageSrc").value="";
+            document.getElementById("imageHeight").value= "";
+             document.getElementById("imageWidth").value ="";
+        });
 
     }
+    imageExists= (image_url)=>{
+
+        var http = new XMLHttpRequest();
+    
+        http.open('HEAD', image_url, false);
+        http.send();
+    
+        return http.status != 404;
+    
+    }
+    imageClicked =( id)=>{
+        console.log(id); // set variable in state for current image clicked.
+        this.setState({currentImage : id}, ()=>{
+            document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
+         document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
+       document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
+        });
+
+    }
+
     switchTabs =(evt) => {
         console.log("we clicking")
         console.log(evt.target.name);
@@ -285,17 +308,18 @@ class CreateLogoScreen extends Component {
                                     
                                         <div className="form-group" >
                                             <label htmlFor="text">Image URL:</label>
-                                            <input  style={{ width: "max-content" }} type="text" className="form-control" name="imageURL"/>
+                                            <input id ="imageSrc" style={{ width: "max-content" }} type="text" className="form-control" name="imageURL"/>
                                         </div>
                                         <div className="form-group">
                                             <label className="imageWidth" htmlFor="color">Image Width:</label>
-                                            <input type="number" className="imageWidth" name="imageWidth" />
+                                            <input id="imageWidth" type="number" className="imageWidth" name="imageWidth" />
                                         </div>
                                         <div className="form-group">
                                         <label className="imageHeight" htmlFor="color">Image Height:</label>
-                                            <input type="number" className="imageHeight" name="imageHeight" />
+
+                                            <input  id="imageHeight" type="number" className="imageHeight" name="imageHeight" />
                                         </div>
-                                        <button type="submit" className="btn btn-success">Submit</button>
+                                      
                                     </div>
                                 </form>
                                 <form name="panel_form" id="panel_form_Logo" onSubmit={e => {
@@ -304,10 +328,15 @@ class CreateLogoScreen extends Component {
                                     this.state.textArray.map((text) => {
                                         copyArr.push({ color: text.color, fontSize: parseInt(text.fontSize), text: text.text })
                                     });
+                                    let copyImageArr= [];
+                                    this.state.imageArray.map((image)=>{
+                                        copyImageArr.push({imageWidth: parseInt(image.imageWidth),imageHeight:parseInt(image.imageHeight), imageURL: image.imageURL })
+                                    })
                                     UserAddLogo({
                                         variables: {
                                             userId: this.props.match.params.id,
                                             TextsArray: copyArr,
+                                            ImageArr: copyImageArr,
                                             backgroundColor: this.state.backgroundColor,
                                             borderColor: this.state.borderColor, borderRadius: parseInt(this.state.borderRadius),
                                             borderWidth: parseInt(this.state.borderWidth), padding: parseInt(this.state.padding), margin: parseInt(this.state.margin),
@@ -362,16 +391,12 @@ class CreateLogoScreen extends Component {
                                             }} placeholder={this.state.borderColor} onChange={this.BorderColorChange} />
                                         </div>
                                         <div className="form-group">
-                                            <label className="sliders_lables" htmlFor="fontSize">Width:</label>
-                                            <input id="LogoWidth" min="4" max="700" type="number" className="input_sliders" name="width" ref={node => {
-                                                fontSize = node;
-                                            }} defaultValue={this.state.width} onChange={this.widthChange} />
+                                            <label className="sliders_lables" >Width:</label>
+                                            <input id="LogoWidth" min="4" max="1500" type="number" className="input_sliders" name="width"  defaultValue={this.state.width} onChange={this.widthChange} />
                                         </div>
                                         <div className="form-group">
-                                            <label className="sliders_lables" htmlFor="fontSize">Height:</label>
-                                            <input id="LogoHeight" min="4" max="150" type="number" className="input_sliders" name="height" ref={node => {
-                                                fontSize = node;
-                                            }} value={this.state.height} onChange={this.heightChange} />
+                                            <label className="sliders_lables" >Height:</label>
+                                            <input id="LogoHeight" min="4" max="1500" type="number" className="input_sliders" name="height"  value={this.state.height} onChange={this.heightChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" htmlFor="fontSize">Font Size:</label>
@@ -419,6 +444,12 @@ class CreateLogoScreen extends Component {
                                         // goToLogoCallback={this.props.goToLogoCallback}
                                         />
                                     ))}
+                                    {
+                                        this.state.imageArray.map((image, index) =>(
+                                            <img height={image.height} width={image.width}  id ={index} onClick = {(event) =>this.imageClicked(event.target.id)} src = {image.imageURL}></img>
+                                    
+                                           ) )
+                                    }
 
                                 </div>
                             </div>

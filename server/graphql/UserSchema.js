@@ -378,14 +378,17 @@ var mutation = new GraphQLObjectType({
           margin: {
             type: GraphQLInt
           },
-          imageWidth: {
-            type: GraphQLInt
-          },
-          imageHeight: {
-            type: GraphQLInt
-          },
+          // imageWidth: {
+          //   type: GraphQLInt
+          // },
+          // imageHeight: {
+          //   type: GraphQLInt
+          // },
           TextsArray:{
             type: GraphQLList(TextsInput)
+          },
+          ImageArr:{
+            type: GraphQLList(ImagesInput)
           }
         },
         resolve: function (root, params) {
@@ -395,7 +398,7 @@ var mutation = new GraphQLObjectType({
               $push: {
                 Logos: {
                   Texts: params.TextsArray ,
-                  images: { imageURL: params.imageURL, imageWidth: params.imageWidth, imageHeight: params.imageHeight },
+                  images:params.ImageArr,
                   width: params.width, height: params.height, backgroundColor: params.backgroundColor,
                   borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius, padding: params.padding, 
                   margin: params.margin

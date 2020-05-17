@@ -1,15 +1,10 @@
 export class LogoImage {
-    constructor() {
-         this.width = 112
-        this.height = 30
-        this.imageURL = "gologolo logo"
-      }
+    constructor(imageURL, height , width) {
+         this.imageWidth = width
+        this.imageHeight = height
+        this.imageURL = imageURL
    
-
-getText =()=>{
-  return this.text;
-}
-
+    }
 
 }
 export default LogoImage
