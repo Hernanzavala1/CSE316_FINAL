@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import { TextComponent } from './TextComponent'
+import {LogoImage} from './LogoImage'
 const GET_LOGO = gql`
 
 query User($userId: String, $logoId: String ){
@@ -86,6 +87,7 @@ class EditLogoScreen extends Component {
             currentImage: 0,
             numTexts: 0,
             update: false,
+            newImage: false,
             // lOGO CANVAS STYLING PROPERTIES
             backgroundColor: "#e8b072",
             borderColor: "#84254a",
@@ -201,11 +203,39 @@ class EditLogoScreen extends Component {
         this.disableTextProperties(true);
         // enable logo properties
         this.disableLogoProperties(false); 
+        this.setState({newImage:true});
+        this.clearImageFields();
 
     }
-    imageClicked = (id) => {
+    clearImageFields =() =>{
+        document.getElementById("imageSrc").value="";
+        document.getElementById("imageHeight").value= "";
+         document.getElementById("imageWidth").value ="";
+    }
+    AddImage =()=>{
+        let copyArray = this.state.imageArray;
+        // get values from the inputs
+        let imageURL = document.getElementById("imageSrc").value;
+        let height = document.getElementById("imageHeight").value;
+        let width = document.getElementById("imageWidth").value;
+        console.log("src is "+ imageURL+ " height "+ height+ " width :"+ width);
+       // console.log(this.imageExists(imageURL));
+       if(imageURL==""|| height ==""|| width==""){
+           console.log("blank shit")
+           return;
+       }
+        copyArray.push(new LogoImage(imageURL, height , width));
+        this.setState({ imageArray: copyArray, newImage:false },()=>{
+            document.getElementById("imageSrc").value="";
+            document.getElementById("imageHeight").value= "";
+             document.getElementById("imageWidth").value ="";
+        });
+
+    }
+    imageClicked = (event, id) => {
+        event.stopPropagation() //keyyyy.
         console.log(id); // set variable in state for current image clicked.
-        this.setState({ currentImage: id }, () => {
+        this.setState({ currentImage: id , newImage: false}, () => {
                     document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
                  document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
                document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
@@ -213,7 +243,7 @@ class EditLogoScreen extends Component {
 
     }
     imageWidthChange= (e)=>{
-        if(this.state.imageArray.length == 0){
+        if(this.state.imageArray.length == 0 || this.state.newImage == true){
             return;
         }
         let copyImageArr= [] ;
@@ -224,7 +254,7 @@ class EditLogoScreen extends Component {
         });
     }
     imageHeightChange =(e)=>{
-        if(this.state.imageArray.length == 0){
+        if(this.state.imageArray.length == 0 || this.state.newImage == true){
             return;
         }
         let copyImageArr= [] ;
@@ -285,8 +315,8 @@ class EditLogoScreen extends Component {
                 borderColor: this.state.borderColor,
                 borderRadius: this.state.borderRadius + "px",
                 borderWidth: this.state.borderWidth + "px",
-                width: this.state.width + "px",
-                height: this.state.height + "px",
+                width: this.state.width + "pt",
+                height: this.state.height + "pt",
                 padding: this.state.padding + "px",
                 margin: this.state.margin + "px",
                 overflowX: "hidden",
@@ -431,7 +461,7 @@ class EditLogoScreen extends Component {
                                                 ))}
                                                 {
                                                     this.state.imageArray.map((image, index) => (
-                                                        <img height={image.imageHeight +"px"} width={image.imageWidth +"px"} id={index} onClick={(event) => this.imageClicked(event.target.id)} src={image.imageURL}></img>
+                                                        <img height={image.imageHeight +"px"} width={image.imageWidth +"px"} id={index} onClick={(event) => this.imageClicked(event ,event.target.id)} src={image.imageURL}></img>
 
                                                     ))
                                                 }

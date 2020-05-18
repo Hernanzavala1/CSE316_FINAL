@@ -151,8 +151,10 @@ class CreateLogoScreen extends Component {
 
         this.disableTextProperties(true);
         // enable logo properties
-        this.disableLogoProperties(false); 
-        
+        this.disableLogoProperties(false);
+        console.log("can add new image now!") 
+        this.setState({newImage:true});
+        this.clearImageFields();
 
 
     }
@@ -214,12 +216,15 @@ class CreateLogoScreen extends Component {
            return;
        }
         copyArray.push(new LogoImage(imageURL, height , width));
-        this.setState({ imageArray: copyArray },()=>{
-            document.getElementById("imageSrc").value="";
-            document.getElementById("imageHeight").value= "";
-             document.getElementById("imageWidth").value ="";
+        this.setState({ imageArray: copyArray, newImage:false },()=>{
+          this.clearImageFields();
         });
 
+    }
+    clearImageFields =() =>{
+        document.getElementById("imageSrc").value="";
+        document.getElementById("imageHeight").value= "";
+         document.getElementById("imageWidth").value ="";
     }
     imageExists= (image_url)=>{
 
@@ -231,17 +236,19 @@ class CreateLogoScreen extends Component {
         return http.status != 404;
     
     }
-    imageClicked =( id)=>{
-        console.log(id); // set variable in state for current image clicked.
-        this.setState({currentImage : id}, ()=>{
+    imageClicked =( event , id)=>{
+        event.stopPropagation() //keyyyy.
+        console.log(id); // set variable in state for current image clicked.\
+        console.log("no new images plz")
+        this.setState({currentImage : id , newImage: false} , ()=>{
             document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
          document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
        document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
         });
-
+      
     }
     imageWidthChange= (e)=>{
-        if(this.state.imageArray.length == 0){
+        if(this.state.imageArray.length == 0 || this.state.newImage == true){
             return;
         }
         let copyImageArr= [] ;
@@ -252,7 +259,7 @@ class CreateLogoScreen extends Component {
         });
     }
     imageHeightChange =(e)=>{
-        if(this.state.imageArray.length == 0){
+        if(this.state.imageArray.length == 0 || this.state.newImage == true){
             return;
         }
         let copyImageArr= [] ;
@@ -470,7 +477,7 @@ class CreateLogoScreen extends Component {
                                     ))}
                                     {
                                         this.state.imageArray.map((image, index) =>(
-                                            <img height={image.imageHeight +"px"} width={image.imageWidth +"px"}   id ={index} onClick = {(event) =>this.imageClicked(event.target.id)} src = {image.imageURL}></img>
+                                            <img style={{zIndex:1}} height={image.imageHeight +"px"} width={image.imageWidth +"px"}   id ={index} onClick = {(event) =>this.imageClicked(event, event.target.id)} src = {image.imageURL}></img>
                                     
                                            ) )
                                     }
