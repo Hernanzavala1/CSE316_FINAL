@@ -62,7 +62,10 @@ class ViewLogoScreen extends Component {
         }
     }
     textClicked = (index) => {
-        this.setState({ currentText: index });
+        this.disableLogoPannel(false);
+        this.setState({ currentText: index }, ()=>{
+            this.disableImagePannel(true);
+        });
     }
     componentDidMount = () => {
         console.log("this is the id :" + this.props.match.params.id);
@@ -70,15 +73,36 @@ class ViewLogoScreen extends Component {
     }
     imageClicked =( id)=>{
         console.log(id); // set variable in state for current image clicked.
+         this.disableImagePannel(false);
         this.setState({currentImage : id}, ()=>{
-    //         document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
-    //      document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
-    //    document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
+            this.disableLogoPannel(true);
         });
 
     }
-
-
+    disableImagePannel =(value)=>{
+        if(  document.getElementById("panel-body_image") ===null){
+            return;
+        }
+        switch(value){
+            case true:
+                document.getElementById("panel-body_image").style.display ="none"; break;
+            case false:
+                document.getElementById("panel-body_image").style.display ="initial";break;
+        }
+        
+    }
+    disableLogoPannel =(value)=>{
+        if(  document.getElementById("panel-body") ===null){
+            return;
+        }
+        switch(value){
+            case true:
+                document.getElementById("panel-body").style.display ="none"; break;
+            case false:
+                document.getElementById("panel-body").style.display ="initial";break;
+        }
+        
+    }
     render() {
         let textArray = [];
         let imageArray = [];
@@ -92,10 +116,10 @@ class ViewLogoScreen extends Component {
                     let logo = data.singleLogo.Logos[0];
                     textArray = data.singleLogo.Logos[0].Texts;
                     imageArray = data.singleLogo.Logos[0].images;
-                    console.log("the text array is :")
-                    console.log(textArray);
-                    console.log("The logo is ")
-                    console.log(logo);
+                    // console.log("the text array is :")
+                    // console.log(textArray);
+                    // console.log("The logo is ")
+                    // console.log(logo);
                     console.log("the logo is above ")
                     const styles = {
                         container: {
@@ -129,8 +153,9 @@ class ViewLogoScreen extends Component {
 
 
                             <div className="parent" style={{ display: "flex" }}>
+                             <div className="pannel">
 
-                                <div style={{ display: "none" }} className="panel-body_image" >
+                                <div style={{ display: "none" }}id ="panel-body_image" >
                                     <div className="card red darken" style={{ backgroundColor: "red" }}>
 
                                         <div >
@@ -157,7 +182,7 @@ class ViewLogoScreen extends Component {
                                     </div>
                                 </div>
 
-                                <div className="panel-body" >
+                                <div id ="panel-body"  >
                                     <div className="card red darken" style={{ backgroundColor: "red" }}>
 
                                         <div >
@@ -190,6 +215,7 @@ class ViewLogoScreen extends Component {
 
                                         </dl>
 
+                                    </div>
                                     </div>
                                 </div>
                                 <div className="workspace">
