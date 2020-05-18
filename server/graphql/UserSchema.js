@@ -487,6 +487,30 @@ var mutation = new GraphQLObjectType({
             }
             return userLogo
         }
+      },
+      LogoDelete:{
+        type: UserType,
+        args: {
+          id: {
+            type: GraphQLString
+          },
+          LogoId: {
+            type: GraphQLString
+          }
+        },
+        resolve: function (root, params) {
+        
+          const userLogo= userModel.update({ "_id": params.id },
+            {
+              $pull: { "Logos": {"_id": params.LogoId} }
+            }
+            );
+
+            if (!userLogo) {
+              throw new Error('Error')
+            }
+            return userLogo
+        }
       }
     }
   }

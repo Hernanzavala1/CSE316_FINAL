@@ -2,23 +2,43 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
-
+import { TextComponent } from './TextComponent'
 const GET_LOGO = gql`
-    query logo($logoId: String) {
-        logo(id: $logoId) {
+
+query User($userId: String, $logoId: String ){
+   singleLogo(userId: $userId,  logoId: $logoId ){
+      _id
+    username 
+      email
+      password
+        Logos{
             _id
-            text
-            color
-            borderColor
-            backgroundColor
-            fontSize
-            borderRadius
-            borderWidth
-            padding
-            margin
-        }
+                Texts{
+                    fontSize
+                    color
+                    text
+                }
+                images{
+                    imageURL
+                    imageWidth
+                    imageHeight
+                }
+                    width
+                    height
+                    backgroundColor 
+                    borderColor
+                    borderWidth
+                    borderRadius
+                    padding
+                    margin
+
+            }
+        
     }
+  
+}
 `;
+
 
 const UPDATE_LOGO = gql`
     mutation updateLogo(
@@ -60,26 +80,62 @@ class EditLogoScreen extends Component {
         // VALUES HERE
 
         this.state = {
-            textColor: null,
-            fontSize: null,
-            backgroundColor: null,
-            borderColor: null,
-            borderRadius: null,
-            borderWidth: null,
-            padding: null,
-            margin: null,
-            textInput: null
+            textArray: [],
+            imageArray: [],
+            currentText: 0,
+            currentImage: 0,
+            numTexts: 0,
+            update: false,
+            // lOGO CANVAS STYLING PROPERTIES
+            backgroundColor: "#e8b072",
+            borderColor: "#84254a",
+            borderRadius: 10,
+            borderWidth: 11,
+            width: 500,
+            height: 500,
+            padding: 0,
+            margin: 0
         }
 
 
     }
-
-    ColorChange = (event) => {
-        this.setState({ textColor: event.target.value })
-    }
     updateText = (event) => {
-        this.setState({ textInput: event.target.value })
-        console.log(" the value of the text is : " + event.target.value)
+        // this.changeText();
+        if (this.state.numTexts == 0) {
+            document.getElementById("TextInp").value = "";
+            document.getElementById("TextInp").disabled = true;
+            return;
+        }
+        else {
+            document.getElementById("TextInp").disabled = false;
+        }
+        let copyOfTextArr = [];
+        Object.assign(copyOfTextArr, this.state.textArray);
+        copyOfTextArr[this.state.currentText].text = event.target.value;
+        this.setState({ textArray: copyOfTextArr });
+        this.setState({ update: false });
+
+        // this.setState({update: false , textArray:copy  })
+        //this.setState({ textInput: event.target.value })
+        console.log(" the value of the text is : " + this.state.textArray[this.state.currentText].text)
+    }
+    widthChange = (event) => {
+        this.setState({ width: event.target.value })
+    }
+    heightChange = (event) => {
+        this.setState({ height: event.target.value })
+    }
+    ColorChange = (event) => {
+        //this.setState({ textColor: event.target.value })
+        let copyOfTextArr = [];
+        Object.assign(copyOfTextArr, this.state.textArray);
+        copyOfTextArr[this.state.currentText].color = event.target.value;
+        this.setState({ textArray: copyOfTextArr });
+        this.setState({ update: false });
+
+        // this.setState({update:true});
+        // this.state.textArray[this.state.currentText].color = event.target.value;
+        // this.setState({update:false});
     }
     BackgroundColorChange = (event) => {
         this.setState({ backgroundColor: event.target.value })
@@ -88,8 +144,12 @@ class EditLogoScreen extends Component {
         this.setState({ borderColor: event.target.value })
     }
     fontSizeChange = (event) => {
-        console.log(event.target.value)
-        this.setState({ fontSize: event.target.value })
+       
+        let copyOfTextArr = [];
+        Object.assign(copyOfTextArr, this.state.textArray);
+        copyOfTextArr[this.state.currentText].fontSize = event.target.value;
+        this.setState({ textArray: copyOfTextArr });
+
     }
     borderRadiusChange = (event) => {
         this.setState({ borderRadius: event.target.value })
@@ -103,67 +163,155 @@ class EditLogoScreen extends Component {
     MarginChange = (event) => {
         this.setState({ margin: event.target.value })
     }
-
-    checkInputs = ()=>{
-        var values = ["text", "Font Size", "Border Radius", "Border Width", "padding", "margin"];
-        let logo_name = document.forms["panel_form"].elements["text"].value
-        
-        if(logo_name.trim().length === 0){
-            alert("Cannot have blank logo names");
-            return false;
-        }
-        for(let i =0; i < values.length; i++){
-           var  content = document.forms["panel_form"].elements[values[i]].value;
-           if(content === ""){
-               alert(values[i] + " is empty");
-               return false;
-           }
-        }
-        return true;
+    disableLogoProperties = (value) => {
+        document.getElementById("BackgroundColor").disabled = value;
+        document.getElementById("BorderColor").disabled = value;
+        document.getElementById("BorderRadius").disabled = value;
+        document.getElementById("BorderWidth").disabled = value;
+        document.getElementById("LogoHeight").disabled = value;
+        document.getElementById("LogoWidth").disabled = value;
+        document.getElementById("paddingInp").disabled = value;
+        document.getElementById("marginInp").disabled = value;
     }
-    render() {
-        const styles = {
-            container:
+    disableTextProperties = (value) => {
+        document.getElementById("TextInp").disabled = value;
+        document.getElementById("ColorInp").disabled = value;
+        document.getElementById("textFontSize").disabled = value;
+    }
+    textClicked = (index) => {
+        // 
+        console.log("The text index is " + index)
 
-            {
-                color: this.state.textColor,
-                fontSize: this.state.fontSize + "pt",
+        this.setState({ currentText: index }, () => {
+            console.log(this.state.currentText + " is the text we looking at ");
+            //enable text properties
+            this.disableTextProperties(false);
+            // re populate the values in the inputs with the correct ones
+            document.getElementById("TextInp").value = this.state.textArray[this.state.currentText].text;
+            document.getElementById("textFontSize").value = this.state.textArray[this.state.currentText].fontSize;
+            document.getElementById("ColorInp").value = this.state.textArray[this.state.currentText].color;
+            // disable properties for the logo itself
+            this.disableLogoProperties(true);
+          
+        })
+
+    }
+    LogoClicked = () => {
+
+        this.disableTextProperties(true);
+        // enable logo properties
+        this.disableLogoProperties(false); 
+
+    }
+    imageClicked = (id) => {
+        console.log(id); // set variable in state for current image clicked.
+        this.setState({ currentImage: id }, () => {
+                    document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
+                 document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
+               document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
+        });
+
+    }
+    imageWidthChange= (e)=>{
+        if(this.state.imageArray.length == 0){
+            return;
+        }
+        let copyImageArr= [] ;
+        Object.assign(copyImageArr, this.state.imageArray);
+        copyImageArr[this.state.currentImage].imageWidth= e.target.value;
+        this.setState({imageArray: copyImageArr}, ()=>{
+            // this.render();
+        });
+    }
+    imageHeightChange =(e)=>{
+        if(this.state.imageArray.length == 0){
+            return;
+        }
+        let copyImageArr= [] ;
+        Object.assign(copyImageArr, this.state.imageArray);
+        copyImageArr[this.state.currentImage].imageHeight= e.target.value;
+        this.setState({imageArray: copyImageArr}, ()=>{
+            // this.render();
+        });
+    }
+    switchTabs =(evt) => {
+        console.log("we clicking")
+        console.log(evt.target.name);
+        switch(evt.target.name){
+           case "Logo": 
+           document.getElementById("panel_form_Logo").style.display ="initial"
+           document.getElementById("panel_form_image").style.display ="none";break;
+           case "Image": 
+           document.getElementById("panel_form_Logo").style.display ="none"
+           document.getElementById("panel_form_image").style.display ="initial"
+            ; break;     }
+      }
+    render() {
+
+
+        let textArray = [];
+        let imageArray = [];
+        let userId = this.props.match.params.id;
+
+        return (
+            <Query query={GET_LOGO} variables={{ userId: this.props.match.params.id, logoId: this.props.match.params.logoId }}>
+                {({ loading, error, data }) => {
+                    if (loading) return 'Loading...';
+                    if (error) return `Error! ${error.message}`;
+                    let logo = data.singleLogo.Logos[0];
+                    textArray = data.singleLogo.Logos[0].Texts;
+                    imageArray = data.singleLogo.Logos[0].images;
+
+                    if (this.state.update == false) {
+                        this.setState({
+                            update: true, textArray: textArray, imageArray: imageArray, numTexts: textArray.length,
+                            backgroundColor: logo.backgroundColor,
+                            borderColor: logo.borderColor,
+                            borderRadius: logo.borderRadius,
+                            borderWidth: logo.borderWidth,
+                            width: logo.width,
+                            height: logo.height,
+                            padding: logo.padding,
+                            margin: logo.margin
+                        })
+                    }
+
+                    const styles = {
+                        container:
+
+                        {
+                            
                 backgroundColor: this.state.backgroundColor,
                 borderColor: this.state.borderColor,
                 borderRadius: this.state.borderRadius + "px",
                 borderWidth: this.state.borderWidth + "px",
+                width: this.state.width + "px",
+                height: this.state.height + "px",
                 padding: this.state.padding + "px",
                 margin: this.state.margin + "px",
+                overflowX: "hidden",
+                overflowY: "hidden",
+                flexWrap: "wrap",
+                display: "flex",
                 borderStyle: "solid"
 
-            }
+                        }
 
-        }
+                    }
+                    let text;
+                    if (textArray.length > 0) {
+                        text =
+                            <input id="TextInp" value={textArray[this.state.currentText].text} style={{ width: "max-content" }} className="form-control" onChange={this.updateText} />
 
+                    }
+                    else {
+                        text =
+                            <input id="TextInp" style={{ width: "max-content" }} className="form-control" onChange={this.updateText} />
 
+                    }
 
-
-        let text, color, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, fontSize;
-        return (
-            <Query query={GET_LOGO} variables={{ logoId: this.props.match.params.id }}>
-                {({ loading, error, data }) => {
-                    if (loading) return 'Loading...';
-                    if (error) return `Error! ${error.message}`;
-                    if (this.state.textInput === null) {
-                       // console.log(data.logo.text + " is the name")
-                        this.setState({
-                            textInput: data.logo.text, textColor: data.logo.color,
-                            fontSize: data.logo.fontSize,
-                            backgroundColor: data.logo.backgroundColor,
-                            borderColor: data.logo.borderColor,
-                            borderRadius: data.logo.borderRadius,
-                            borderWidth: data.logo.borderWidth,
-                            padding: data.logo.padding,
-                            margin: data.logo.margin
-                        })
-                    };
                     return (
-                        <Mutation mutation={UPDATE_LOGO} key={data.logo._id} onCompleted={() => this.props.history.push(`/`)}>
+                        <Mutation mutation={UPDATE_LOGO} key={logo._id} onCompleted={() => this.props.history.push(`/`)}>
                             {(updateLogo, { loading, error }) => (
 
                                 <div className="container">
@@ -179,87 +327,91 @@ class EditLogoScreen extends Component {
 
                                     <div className="parent" style={{ display: "flex" }}>
                                         <div className="panel-body">
-                                            <form name = "panel_form" onSubmit={e => {
-                                                e.preventDefault();
-                                                if(this.checkInputs()){
-                                                updateLogo({
-                                                    variables: {
-                                                        id: data.logo._id, text: this.state.textInput, color: this.state.textColor, backgroundColor: this.state.backgroundColor,
-                                                        borderColor: this.state.borderColor, fontSize: parseInt(this.state.fontSize), borderRadius: parseInt(this.state.borderRadius),
-                                                        borderWidth: parseInt(this.state.borderWidth), padding: parseInt(this.state.padding), margin: parseInt(this.state.margin)
-                                                    }
-                                                });
-                                                text.value = "";
-                                                color.value = "";
-                                                backgroundColor.value = "";
-                                                borderColor.value = "";
-                                                fontSize.value = "";
-                                                borderWidth.value = "";
-                                                borderRadius.value = "";
-                                                padding.value = "";
-                                                margin.value = "";
-                                            }}}>
+                                            <div class="tab">
+                                                <button name="Logo" class="tablinks" onClick={this.switchTabs}>Logo</button>
+                                                <button name="Image" class="tablinks" onClick={this.switchTabs}>Image</button>
+
+                                            </div>
+                                            <form style={{ display: "none" }} id="panel_form_image">
+                                                <div className="card red darken" style={{ backgroundColor: "red" }}>
+
+                                                    <div >
+                                                        <h3 className="panel-title" style={{ textAlign: "center" }}>
+                                                            Edit Image
+                                                           </h3>
+                                                    </div>
+
+                                                    <div className="form-group" >
+                                                        <label htmlFor="text">Image URL:</label>
+                                                        <input id="imageSrc" style={{ width: "max-content" }} type="text" className="form-control" name="imageURL" />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label className="imageWidth" htmlFor="color">Image Width:</label>
+                                                        <input id="imageWidth" type="number" className="imageWidth" name="imageWidth" onChange={(e)=>this.imageWidthChange(e)}/>
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label className="imageHeight" htmlFor="color">Image Height:</label>
+
+                                                        <input id="imageHeight" type="number" className="imageHeight" name="imageHeight" onChange={(e)=>this.imageHeightChange(e)}/>
+                                                    </div>
+
+                                                </div>
+                                            </form>
+
+                                            <form name="panel_form" id="panel_form_Logo">
                                                 <div className="card red darken" style={{ backgroundColor: "red" }}>
                                                     <div >
-                                                        <h3 className="panel-title" style={{textAlign:"center"}}>
+                                                        <h3 className="panel-title" style={{ textAlign: "center" }}>
                                                             Edit Logo
                                                           </h3>
                                                     </div>
 
-                                                    <div className="form-group">
-                                                        <label htmlFor="text">Text:</label>
-                                                        <input style={{width:"max-content"}}  type="text" className="form-control" name="text" ref={node => {
-                                                            text = node;
-                                                        }} defaultValue={this.state.textInput} onChange={this.updateText} />
+                                                    <div >
+                                                        <label>Text:</label>
+                                                        {text}
                                                     </div>
+
                                                     <div className="form-group">
                                                         <label className="colorInputLabel" htmlFor="color">Color:</label>
-                                                        <input type="color" className="color_input" name="color" ref={node => {
-                                                            color = node;
-                                                        }} placeholder="Color" defaultValue={data.logo.color} onChange={this.ColorChange} />
+                                                        <input id="ColorInp" type="color" className="color_input" name="color" value={textArray[this.state.currentText].color} onChange={this.ColorChange} />
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="colorInputLabel" htmlFor="color">backgroundColor:</label>
-                                                        <input type="color" className="color_input" name="backgroundColor" ref={node => {
-                                                            backgroundColor = node;
-                                                        }} placeholder="background Color" defaultValue={data.logo.backgroundColor} onChange={this.BackgroundColorChange} />
+                                                        <input id="BackgroundColor" type="color" className="color_input" name="backgroundColor" placeholder="background Color" value={this.state.backgroundColor} onChange={this.BackgroundColorChange} />
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="colorInputLabel" htmlFor="color">Border Color:</label>
-                                                        <input type="color" className="color_input" name="borderColor" ref={node => {
-                                                            borderColor = node;
-                                                        }}  defaultValue={data.logo.borderColor} onChange={this.BorderColorChange} />
+                                                        <input id="BorderColor" type="color" className="color_input" name="borderColor" value={this.state.borderColor} onChange={this.BorderColorChange} />
                                                     </div>
                                                     <div className="form-group">
-                                                        <label   className="sliders_lables" htmlFor="fontSize">Font Size:</label>
-                                                        <input  min="4" max="150" type="number" className="input_sliders" name="Font Size" ref={node => {
-                                                            fontSize = node;
-                                                        }}  defaultValue={data.logo.fontSize} onChange={this.fontSizeChange} />
+                                                        <label className="sliders_lables" >Width:</label>
+                                                        <input id="LogoWidth" min="4" max="1500" type="number" className="input_sliders" name="width" defaultValue={this.state.width} onChange={this.widthChange} />
                                                     </div>
                                                     <div className="form-group">
-                                                        <label  className="sliders_lables" htmlFor="borderWidth">Border Width:</label>
-                                                        <input  min="0" max="250" type="number" className="input_sliders" name="Border Width" ref={node => {
-                                                            borderWidth = node;
-                                                        }} defaultValue={data.logo.borderWidth} onChange={this.borderWidthChange} />
+                                                        <label className="sliders_lables" >Height:</label>
+                                                        <input id="LogoHeight" min="4" max="1500" type="number" className="input_sliders" name="height" value={this.state.height} onChange={this.heightChange} />
                                                     </div>
                                                     <div className="form-group">
-                                                        <label  className="sliders_lables" htmlFor="borderRadius">Border Radius:</label>
-                                                        <input  min="0" max="250" type="number" className="input_sliders" name="Border Radius" ref={node => {
-                                                            borderRadius = node;
-                                                        }} defaultValue={data.logo.borderRadius} onChange={this.borderRadiusChange} />
+                                                        <label className="sliders_lables" htmlFor="fontSize">Font Size:</label>
+                                                        <input id="textFontSize" min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
                                                     </div>
                                                     <div className="form-group">
-                                                        <label  className="sliders_lables" htmlFor="padding">Padding:</label>
-                                                        <input min="0" max="250" type="number" className="input_sliders" name="padding" ref={node => {
-                                                            padding = node;
-                                                        }} defaultValue={data.logo.padding} onChange={this.paddingChange} />
+                                                        <label className="sliders_lables" htmlFor="borderWidth">Border Width:</label>
+                                                        <input id="BorderWidth" min="0" max="250" type="number" className="input_sliders" name="Border Width" defaultValue={this.state.borderWidth} onChange={this.borderWidthChange} />
                                                     </div>
                                                     <div className="form-group">
-                                                        <label   className="sliders_lables" htmlFor="margin">Margin:</label>
-                                                        <input min="0" max="250" type="number" className="input_sliders" name="margin" ref={node => {
-                                                            margin = node;
-                                                        }} defaultValue={data.logo.margin} onChange={this.MarginChange} />
+                                                        <label className="sliders_lables" htmlFor="borderRadius">Border Radius:</label>
+                                                        <input id="BorderRadius" min="0" max="400" type="number" className="input_sliders" name="Border Radius" value={this.state.borderRadius} onChange={this.borderRadiusChange} />
                                                     </div>
+                                                    <div className="form-group">
+                                                        <label className="sliders_lables" htmlFor="padding">Padding:</label>
+                                                        <input id="paddingInp" min="0" max="250" type="number" className="input_sliders" name="padding"  value={this.state.padding} onChange={this.paddingChange} />
+                                                    </div>
+                                                    <div className="form-group">
+                                                        <label className="sliders_lables" htmlFor="margin">Margin:</label>
+                                                        <input id="marginInp" min="0" max="250" type="number" className="input_sliders" name="margin"value={this.state.margin} onChange={this.MarginChange} />
+                                                    </div>
+
                                                     <button type="submit" className="btn btn-success">Submit</button>
                                                 </div>
                                             </form>
@@ -268,12 +420,23 @@ class EditLogoScreen extends Component {
                                         </div>
                                         <div className="workspace">
 
-                                            <pre
-                                                className="logo" style={styles.container}
-                                            >
+                                            <div id="Logo" onClick={this.LogoClicked} className=" Logo" style={styles.container}>
+                                                {this.state.textArray.map((text, index) => (
+                                                    <TextComponent
+                                                        textClicked={this.textClicked}
+                                                        index={index}
+                                                        text={text}
 
-                                                {this.state.textInput}
-                                            </pre>
+                                                    />
+                                                ))}
+                                                {
+                                                    this.state.imageArray.map((image, index) => (
+                                                        <img height={image.imageHeight +"px"} width={image.imageWidth +"px"} id={index} onClick={(event) => this.imageClicked(event.target.id)} src={image.imageURL}></img>
+
+                                                    ))
+                                                }
+
+                                            </div>
 
                                         </div>
                                     </div>

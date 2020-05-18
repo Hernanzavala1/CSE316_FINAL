@@ -53,6 +53,7 @@ class CreateLogoScreen extends Component {
             currentImage:0, 
             numTexts: 1,
             update: false,
+            newImage: false,
             // lOGO CANVAS STYLING PROPERTIES
             backgroundColor: "#e8b072",
             borderColor: "#84254a",
@@ -151,7 +152,8 @@ class CreateLogoScreen extends Component {
         this.disableTextProperties(true);
         // enable logo properties
         this.disableLogoProperties(false); 
-;
+        
+
 
     }
     disableLogoProperties =(value)=>{
@@ -238,6 +240,28 @@ class CreateLogoScreen extends Component {
         });
 
     }
+    imageWidthChange= (e)=>{
+        if(this.state.imageArray.length == 0){
+            return;
+        }
+        let copyImageArr= [] ;
+        Object.assign(copyImageArr, this.state.imageArray);
+        copyImageArr[this.state.currentImage].imageWidth= e.target.value;
+        this.setState({imageArray: copyImageArr}, ()=>{
+            // this.render();
+        });
+    }
+    imageHeightChange =(e)=>{
+        if(this.state.imageArray.length == 0){
+            return;
+        }
+        let copyImageArr= [] ;
+        Object.assign(copyImageArr, this.state.imageArray);
+        copyImageArr[this.state.currentImage].imageHeight= e.target.value;
+        this.setState({imageArray: copyImageArr}, ()=>{
+            // this.render();
+        });
+    }
 
     switchTabs =(evt) => {
         console.log("we clicking")
@@ -312,12 +336,12 @@ class CreateLogoScreen extends Component {
                                         </div>
                                         <div className="form-group">
                                             <label className="imageWidth" htmlFor="color">Image Width:</label>
-                                            <input id="imageWidth" type="number" className="imageWidth" name="imageWidth" />
+                                            <input id="imageWidth" type="number" className="imageWidth" name="imageWidth" onChange={(e)=>this.imageWidthChange(e)} />
                                         </div>
                                         <div className="form-group">
                                         <label className="imageHeight" htmlFor="color">Image Height:</label>
 
-                                            <input  id="imageHeight" type="number" className="imageHeight" name="imageHeight" />
+                                            <input  id="imageHeight" type="number" className="imageHeight" name="imageHeight" onChange={(e)=>this.imageHeightChange(e)} />
                                         </div>
                                       
                                     </div>
@@ -382,13 +406,13 @@ class CreateLogoScreen extends Component {
                                             <label className="colorInputLabel" htmlFor="color">Background Color:</label>
                                             <input id="BackgroundColor" type="color" className="color_input" name="backgroundColor" ref={node => {
                                                 backgroundColor = node;
-                                            }} placeholder={this.state.backgroundColor} onChange={this.BackgroundColorChange} />
+                                            }} value={this.state.backgroundColor} onChange={this.BackgroundColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="colorInputLabel" htmlFor="color">Border Color:</label>
                                             <input id="BorderColor" type="color" className="color_input" name="borderColor" ref={node => {
                                                 borderColor = node;
-                                            }} placeholder={this.state.borderColor} onChange={this.BorderColorChange} />
+                                            }} value={this.state.borderColor} onChange={this.BorderColorChange} />
                                         </div>
                                         <div className="form-group">
                                             <label className="sliders_lables" >Width:</label>
@@ -446,7 +470,7 @@ class CreateLogoScreen extends Component {
                                     ))}
                                     {
                                         this.state.imageArray.map((image, index) =>(
-                                            <img height={image.height} width={image.width}  id ={index} onClick = {(event) =>this.imageClicked(event.target.id)} src = {image.imageURL}></img>
+                                            <img height={image.imageHeight +"px"} width={image.imageWidth +"px"}   id ={index} onClick = {(event) =>this.imageClicked(event.target.id)} src = {image.imageURL}></img>
                                     
                                            ) )
                                     }
