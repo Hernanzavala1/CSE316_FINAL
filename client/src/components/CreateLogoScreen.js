@@ -480,6 +480,7 @@ class CreateLogoScreen extends Component {
                                         <TextComponent
                                             textClicked={this.textClicked}
                                             index={index}
+                                            key={index}
                                             text={text}
                                         // goToLogoCallback={this.props.goToLogoCallback}
                                         />

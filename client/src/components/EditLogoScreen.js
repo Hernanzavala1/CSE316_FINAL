@@ -506,6 +506,7 @@ class EditLogoScreen extends Component {
                                                     <TextComponent
                                                         textClicked={this.textClicked}
                                                         index={index}
+                                                        key={index}
                                                         text={text}
 
                                                     />

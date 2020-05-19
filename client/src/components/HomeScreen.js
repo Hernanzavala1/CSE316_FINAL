@@ -69,16 +69,16 @@ class HomeScreen extends Component {
           // }
 
           return (
-            <div class="container ">
-              <div class="row1Header center-block  text-center">
-                <div class="col-lg-12  ">
+            <div className="container ">
+              <div className="row1Header center-block  text-center">
+                <div className="col-lg-12  ">
                   <h1>Welcome {data.user.username}</h1>
                 </div>
               </div>
 
-              <div class="row center-block  text-center h-100 ">
-                <div class="col-lg-8 ">
-                  <div class="well">
+              <div className="row center-block  text-center h-100 ">
+                <div className="col-lg-8 ">
+                  <div className="well">
                     <br />
                     <br />
                     <br />
@@ -105,8 +105,8 @@ class HomeScreen extends Component {
                   </div>
                 </div>
 
-                <div class="col col-lg-offset-6">
-                  <div class="well">
+                <div className="col col-lg-offset-6">
+                  <div className="well">
                     <br />
                     <br />
                     <br />
@@ -114,7 +114,7 @@ class HomeScreen extends Component {
                     <br />
                   </div>
 
-                  <div class="vcenter">
+                  <div className="vcenter">
                     <div>
                       <h3> Menu </h3>
                     </div>
@@ -122,7 +122,7 @@ class HomeScreen extends Component {
                     <div>
                       {console.log('user id ' + data.user._id)}
                       <Link to={`/user/${data.user._id}`}>
-                        <button type="button" class="btn btn-primary btn-block">
+                        <button type="button" className="btn btn-primary btn-block">
                           User
                         </button>
                       </Link>
@@ -131,14 +131,14 @@ class HomeScreen extends Component {
                       <Link to={`/create/${data.user._id}`}>
                         <button
                           type="button"
-                          class="btn btn-primary btn-block "
+                          className="btn btn-primary btn-block "
                         >
                           Create Logo
                         </button>
                       </Link>
                     </div>
                     <div>
-                      <button type="button" class="btn btn-primary btn-block " onClick={this.logout}>
+                      <button type="button" className="btn btn-primary btn-block " onClick={this.logout}>
                         LogOut
                       </button>
                     </div>

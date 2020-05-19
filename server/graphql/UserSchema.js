@@ -574,6 +574,28 @@ var mutation = new GraphQLObjectType({
           }
           return userLogo
         }
+      },
+      updateUser: {
+        type: UserType,
+        args: {
+          userId:{
+            type: GraphQLString
+          },
+          username: {
+            type: GraphQLString
+          },
+          email: {
+            type: GraphQLString
+          }
+        },
+        resolve: function (root, params) {
+         
+          const user = userModel.findByIdAndUpdate({"_id": params.userId}, {username: params.username, email: params.email});
+          if (!user) {
+            throw new Error('Error');
+          }
+          return user
+        }
       }
     }
   }

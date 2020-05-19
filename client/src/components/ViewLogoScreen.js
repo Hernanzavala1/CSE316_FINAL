@@ -267,13 +267,14 @@ class ViewLogoScreen extends Component {
                                             <TextComponent
                                                 textClicked={this.textClicked}
                                                 index={index}
+                                                key={index}
                                                 text={text}
                                            
                                             />
                                         ))}
                                         {
                                             imageArray.map((image, index) => (
-                                                <img height={image.imageHeight +"px"} width={image.imageWidth +"px"}  id={index} onClick={(event) => this.imageClicked(event.target.id)} src={image.imageURL}></img>
+                                                <img alt="Error" height={image.imageHeight +"px"} width={image.imageWidth +"px"}  id={index} onClick={(event) => this.imageClicked(event.target.id)} src={image.imageURL}></img>
 
                                             ))
                                         }

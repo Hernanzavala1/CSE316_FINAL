@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+import { Link } from 'react-router-dom';
 const GET_USER = gql`
 query User($id: String){
     user(id: $id ){
@@ -51,7 +52,7 @@ class userAccount extends Component {
                                     <div>
                                         <h1> Account </h1>
                                     </div>
-
+                                    <h4><Link style={{ color: "white" }} to="/homescreen">Home</Link></h4>
 
                                 </div>
 
@@ -74,12 +75,7 @@ class userAccount extends Component {
                                             <div>
                                                 <label> {data.user.email} </label>
                                             </div>
-                                            <div>
-                                                <label> Password:</label>
-                                            </div>
-                                            <div>
-                                                <label> {(data.user.password )} </label>
-                                            </div> 
+                                      
                                         </div>
 
 

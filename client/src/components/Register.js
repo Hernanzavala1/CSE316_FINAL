@@ -49,11 +49,7 @@ class Register extends Component {
           <label for="inputUsername" class="sr-only">
             User Name
           </label>
-          <input
-            type="text"
-            class="form-control"
-            placeholder="user name"
-            name="username"
+          <input type="text" class="form-control" placeholder="user name" name="username"
             value={username}
             onChange={this.onChange}
             required
@@ -61,12 +57,8 @@ class Register extends Component {
           <label for="inputEmail" class="sr-only">
             Email address
           </label>
-          <input
-            type="email"
-            class="form-control"
-            placeholder="Email address"
-            name="email"
-            value={email}
+          <input type="email"  class="form-control" placeholder="Email address" name="email"
+             value={email}
             onChange={this.onChange}
             required
           />
@@ -85,6 +77,9 @@ class Register extends Component {
           <button class="btn btn-lg btn-primary btn-block" type="submit">
             Register
           </button>
+          <Link to="/">
+          <button className="btn btn-lg btn-primary btn-block">Cancel</button>
+          </Link>
         </form>
       </div>
     );
