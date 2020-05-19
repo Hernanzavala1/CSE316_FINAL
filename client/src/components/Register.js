@@ -9,6 +9,7 @@ class Register extends Component {
     super();
     this.state = {
       username: '',
+      email: '',
       password: '',
     };
   }
@@ -21,11 +22,11 @@ class Register extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { username, password } = this.state;
+    const { username, email, password } = this.state;
     console.log(username + ' is the name');
 
     axios
-      .post('/auth/register', { username, password })
+      .post('/auth/register', { username, email, password })
       .then((result) => {
         console.log('THIS SHIT WORKED B');
         console.log('registering user ' + username);
@@ -40,11 +41,23 @@ class Register extends Component {
   };
 
   render() {
-    const { username, password } = this.state;
+    const { username, email, password } = this.state;
     return (
       <div class="container">
         <form class="form-signin" onSubmit={this.onSubmit}>
           <h2 class="form-signin-heading">Register</h2>
+          <label for="inputUsername" class="sr-only">
+            User Name
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="user name"
+            name="username"
+            value={username}
+            onChange={this.onChange}
+            required
+          />
           <label for="inputEmail" class="sr-only">
             Email address
           </label>
@@ -52,8 +65,8 @@ class Register extends Component {
             type="email"
             class="form-control"
             placeholder="Email address"
-            name="username"
-            value={username}
+            name="email"
+            value={email}
             onChange={this.onChange}
             required
           />

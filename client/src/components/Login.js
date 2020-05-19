@@ -10,7 +10,7 @@ class Login extends Component {
   constructor() {
     super();
     this.state = {
-      username: '',
+      email: '',
       password: '',
       message: ''
     };
@@ -24,9 +24,9 @@ class Login extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const { username, password } = this.state;
+    const { email, password } = this.state;
 
-    axios.post('/auth/login', { username, password })
+    axios.post('/auth/login', { email, password })
       .then((result) => {
         localStorage.setItem('jwtToken', result.data.token);
         this.setState({ message: '' });
@@ -40,7 +40,7 @@ class Login extends Component {
   }
 
   render() {
-    const { username, password, message } = this.state;
+    const { email, password, message } = this.state;
     return (
       <div class="container">
         <form class="form-signin" onSubmit={this.onSubmit}>
@@ -51,7 +51,7 @@ class Login extends Component {
           }
           <h2 class="form-signin-heading">Please sign in</h2>
           <label for="inputEmail" class="sr-only">Email address</label>
-          <input type="email" class="form-control" placeholder="Email address" name="username" value={username} onChange={this.onChange} required/>
+          <input type="email" class="form-control" placeholder="Email address" name="email" value={email} onChange={this.onChange} required/>
           <label for="inputPassword" class="sr-only">Password</label>
           <input type="password" class="form-control" placeholder="Password" name="password" value={password} onChange={this.onChange} required/>
           <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>

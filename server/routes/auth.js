@@ -16,18 +16,18 @@ router.post('/register', function (req, res) {
   let password = req.body.password;
   let email = req.body.email;
   console.log(req.body.username + ' and password is ' + req.body.password);
-  if (username === '' || password === '') {
+  if (username === '' || password === '' || email ==='') {
     console.log('the user nanme is empty');
     res.json({ success: false, msg: 'Please pass username and password.' });
   } else {
     var newUser = new User({
-      username: req.body.username,
-      password: req.body.password,
-      email: email,
+      username: username,
+      password: password,
+      email: email
     });
 
     User.findOne({
-      username: newUser.username
+      email: newUser.email
     })
       .then(user => {
         if (!user) {
@@ -49,17 +49,15 @@ router.post('/register', function (req, res) {
       .catch(err => {
         res.send('error: ' + err)
       })
-
-
-
   }
 });
 
 
 router.post('/login', function (req, res) {
+  let email = req.body.email;
   User.findOne(
     {
-      username: req.body.username,
+      email: email,
     },
     function (err, user) {
       if (err) throw err;
