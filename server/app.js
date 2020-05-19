@@ -33,11 +33,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/auth', auth);
 
-// app.use(auth);
-// app.post('/register', jsonParser, function(req, res) {
-//        console.log(req.body);
-//  });
-// app.use('*', cors());
+
 app.use(
   '/graphql',
   cors(),

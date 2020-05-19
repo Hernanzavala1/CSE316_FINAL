@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import '../App.css';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-
+import jwt_decode from 'jwt-decode';
 const GET_LOGOS = gql`
-  {
-    user(id: "5e9384ab85b1763c50ba98da") {
+query User($userId: String!){
+    user(id: $userId) {
       _id
       username
       email
@@ -26,10 +26,29 @@ const GET_LOGOS = gql`
   }
 `;
 
+
 class HomeScreen extends Component {
+
+  constructor(props){
+    super()
+    this.state={
+      userId: ""
+    }
+  }
+
+  componentDidMount() {
+    let token = localStorage.jwtToken
+    let decoded = jwt_decode(token)
+    console.log("the token is :")
+    console.log(decoded._id)
+    this.setState({userId:decoded._id});
+  
+  }
+
+
   render() {
     return (
-      <Query pollInterval={500} query={GET_LOGOS}>
+      <Query pollInterval={500} query={GET_LOGOS} variables={{ userId: this.state.userId}}>
         {({ loading, error, data }) => {
           if (loading) return 'Loading...';
           if (error) return `Error! ${error.message}`;

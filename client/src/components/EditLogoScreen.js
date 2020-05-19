@@ -341,14 +341,14 @@ class EditLogoScreen extends Component {
                     }
 
                     return (
-                        <Mutation mutation={UPDATE_LOGO} key={logo._id} onCompleted={() => this.props.history.push(`/`)}>
+                        <Mutation mutation={UPDATE_LOGO} key={logo._id} onCompleted={() => this.props.history.push(`/homescreen`)}>
                             {(updateLogo, { loading, error }) => (
 
                                 <div className="container">
                                     <nav className="nav-bar">
                                         <div className="nav-wrapper">
                                             <div className="panel-heading">
-                                                <h4><Link style={{ color: "black" }} to="/">Home</Link></h4>
+                                                <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
 
                                             </div>
                                         </div>

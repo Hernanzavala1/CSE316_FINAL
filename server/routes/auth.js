@@ -25,15 +25,36 @@ router.post('/register', function (req, res) {
       password: req.body.password,
       email: email,
     });
-    // save the user
-    newUser.save(function (err) {
-      if (err) {
-        return res.json({ success: false, msg: 'Username already exists.' });
-      }
-      res.json({ success: true, msg: 'Successful created new user.' });
-    });
+
+    User.findOne({
+      username: newUser.username
+    })
+      .then(user => {
+        if (!user) {
+          console.log("the user was not  found");
+          // save the user
+          newUser.save(function (err) {
+            if (err) {
+              console.log("username already exists!")
+              return res.json({ success: false, msg: 'Username already exists.' });
+            }
+            res.json({ success: true, msg: 'Successful created new user.' });
+          });
+
+        } else {
+          console.log("user already exist ")
+          res.json({ error: 'User already exists' })
+        }
+      })
+      .catch(err => {
+        res.send('error: ' + err)
+      })
+
+
+
   }
 });
+
 
 router.post('/login', function (req, res) {
   User.findOne(

@@ -304,13 +304,13 @@ class CreateLogoScreen extends Component {
 
         let text, color, backgroundColor, borderColor, borderRadius, borderWidth, padding, margin, fontSize;
         return (
-            <Mutation mutation={UserAddLogo} onCompleted={() => this.props.history.push('/')}>
+            <Mutation mutation={UserAddLogo} onCompleted={() => this.props.history.push('/homescreen')}>
                 {(UserAddLogo, { loading, error }) => (
                     <div className="container">
                         <nav className="nav-bar">
                             <div className="nav-wrapper">
                                 <div className="panel-heading">
-                                    <h4><Link style={{ color: "black" }} to="/">Home</Link></h4>
+                                    <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
                                     <div >
                                             <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
                                             <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>

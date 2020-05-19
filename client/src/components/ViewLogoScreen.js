@@ -181,7 +181,7 @@ class ViewLogoScreen extends Component {
                             <nav className="nav-bar">
                                 <div className="nav-wrapper">
                                     <div className="panel-heading">
-                                        <h4><Link style={{ color: "black" }} to="/">Home</Link></h4>
+                                        <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
 
                                     </div>
                                 </div>
