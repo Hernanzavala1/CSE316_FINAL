@@ -14,7 +14,7 @@ import ViewLogoScreen from './components/ViewLogoScreen';
 import userAccount from './components/userAccount';
 import Login from './components/Login';
 import Register from './components/Register';
-const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
+const client = new ApolloClient({ uri: 'http://localhost:3003/graphql' });
 
 ReactDOM.render(
   <ApolloProvider client={client}>
@@ -22,7 +22,7 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={Login} />
         <Route path="/register" component={Register} />
-        {/* <Route exact path='/' component={HomeScreen} /> */}
+        <Route  path='/homescreen' component={HomeScreen} />
         <Route path="/edit/:id/:logoId" component={EditLogoScreen} />
         <Route path="/create/:id" component={CreateLogoScreen} />
         <Route path="/user/:id" component={userAccount} />

@@ -29,7 +29,7 @@ class Register extends Component {
       .then((result) => {
         console.log('THIS SHIT WORKED B');
         console.log('registering user ' + username);
-        this.props.history.push('/login');
+        this.props.history.push('/');
       })
       .catch((err) => {
         console.log(
