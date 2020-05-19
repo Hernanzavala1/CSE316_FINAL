@@ -27,12 +27,40 @@ query User($id: String){
 // `;
 
 class userAccount extends Component {
+  
+    constructor(props){
+        super()
+        this.state={
+            username:"",
+            email: "",
+            updated: false
+        }
+    }
 
     componentDidMount = () => {
         console.log("this is the id :" + this.props.match.params.id);
     }
-
+    onChange = (e) => {
+        const state = this.state
+        state[e.target.name] = e.target.value;
+        this.setState(state);
+      }
+      displayForm =(e, val)=>{
+          e.preventDefault();
+          switch(val){
+              case true:
+                document.getElementById("user_panel").style.display ="none";
+                document.getElementById("input_panel").style.display ="initial";
+                break;
+            case false:
+                document.getElementById("user_panel").style.display ="initial";
+                  document.getElementById("input_panel").style.display ="none";
+                  
+          }
+        
+      }
     render() {
+
         return (
 
             <Query pollInterval={500} query={GET_USER} variables={{ id: this.props.match.params.id }}>
@@ -40,8 +68,11 @@ class userAccount extends Component {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
                     //  console.log(data.user.Logos[0].Texts[0].text);
-
-
+                        if(this.state.updated === false){
+                            this.setState({username:data.user.username, email: data.user.email, updated:true});
+                          
+                        }
+                        const { username, email } = this.state;
                     return (
                         <div className="container center-block  text-center">
 
@@ -50,15 +81,20 @@ class userAccount extends Component {
                                 <div className="col col-lg-12 ">
 
                                     <div>
-                                        <h1> Account </h1>
+                                        <div>
+                                            <h4><Link style={{ color: "white" }} to="/homescreen">Home</Link></h4>
+                                        </div>
+                                   
+                                        <div > <h1> Account </h1> </div>
                                     </div>
-                                    <h4><Link style={{ color: "white" }} to="/homescreen">Home</Link></h4>
+                                    
 
                                 </div>
+                               
 
                             </div>
 
-                            <div className="row ">
+                            <div id="user_panel" className="row ">
 
                                 <div className=" col-lg-12  center-block  text-center">
 
@@ -67,13 +103,21 @@ class userAccount extends Component {
                                                 <label> Username:</label>
                                             </div>
                                             <div>
-                                                <label> {data.user.username} </label>
+                                                <label> {username}</label> 
                                             </div>
                                             <div>
                                                 <label> email:</label>
                                             </div>
                                             <div>
-                                                <label> {data.user.email} </label>
+                                                <label >  {email} </label>
+                                            </div>
+
+                                            <div>
+                                                <Link  to="/homescreen">
+                                                <button className="btn btn-primary ">cancel</button>
+                                                </Link>
+                                                
+                                                <button className="btn btn-primary " onClick={(e) => this.displayForm(e, true)}> Update User</button>
                                             </div>
                                       
                                         </div>
@@ -83,7 +127,27 @@ class userAccount extends Component {
 
                             </div>
 
+                                <form  id ="input_panel" style={{display:"none"} }>
+                                <div className="panel">
+                                            <div>
+                                                <label> Username:</label>
+                                            </div>
+                                            <div>
+                                                <input name="username" type="text" onChange={this.onChange} value= {username}  />
+                                            </div>
+                                            <div>
+                                                <label> email:</label>
+                                            </div>
+                                            <div>
+                                                <input type ="email" value={email} name="email" onChange={this.onChange}/>
+                                            </div>
+                                            <div>
+                                                <button  className="btn btn-primary " type= "submit">Update</button>
+                                                <button onClick={(e)=>this.displayForm(e, false)} className="btn btn-primary ">Cancel</button>
+                                            </div>
+                                        </div>
 
+                                </form>
 
 
 
