@@ -39,7 +39,7 @@ class userAccount extends Component {
 
     componentDidMount = () => {
         console.log("this is the id :" + this.props.match.params.id);
-    }
+    }  
     onChange = (e) => {
         const state = this.state
         state[e.target.name] = e.target.value;
