@@ -6,22 +6,20 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var graphqlHTTP = require('express-graphql');
 var schema = require('./graphql/UserSchema');
-var cors = require("cors");
-var auth = require('./routes/auth')
+var cors = require('cors');
+var auth = require('./routes/auth');
 // var bodyParser = require('body-parser')
 // var jsonParser = bodyParser.json(); //added
- // passport
-mongoose.connect('mongodb://localhost/node-graphql', { promiseLibrary: require('bluebird'), useNewUrlParser: true })
-  .then(() =>  console.log('connection successful'))
-  .catch((err) => console.error("this is the errror: "+ err));
-  
+// passport
+mongoose
+  .connect('mongodb://localhost/node-graphql', {
+    promiseLibrary: require('bluebird'),
+    useNewUrlParser: true,
+  })
+  .then(() => console.log('connection successful'))
+  .catch((err) => console.error('this is the errror: ' + err));
 
 var app = express();
-
-
-
-
-
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,27 +31,30 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/auth', auth);
 
-app.use(auth);
-// app.post('/register', jsonParser, function(req, res) { 
+// app.use(auth);
+// app.post('/register', jsonParser, function(req, res) {
 //        console.log(req.body);
 //  });
 // app.use('*', cors());
-app.use('/graphql', cors(), graphqlHTTP({
-  schema: schema,
-  rootValue: global,
-  graphiql: true,
-}));
+app.use(
+  '/graphql',
+  cors(),
+  graphqlHTTP({
+    schema: schema,
+    rootValue: global,
+    graphiql: true,
+  })
+);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
-
-
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -62,8 +63,5 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
- 
-
 
 module.exports = app;

@@ -12,27 +12,25 @@ import EditLogoScreen from './components/EditLogoScreen';
 import CreateLogoScreen from './components/CreateLogoScreen';
 import ViewLogoScreen from './components/ViewLogoScreen';
 import userAccount from './components/userAccount';
-import Login from './components/Login'
+import Login from './components/Login';
 import Register from './components/Register';
 const client = new ApolloClient({ uri: 'http://localhost:3000/graphql' });
 
 ReactDOM.render(
-    <ApolloProvider client={client}>
-        <Router>
-            <div>
-           
-{/*                 
-                <Route  exact path='/' component={Login} />
-                <Route  path='/register' component={Register} /> */}
-                <Route exact path='/' component={HomeScreen} />
-                <Route path='/edit/:id/:logoId' component={EditLogoScreen} />
-                <Route path='/create/:id' component={CreateLogoScreen} />
-                <Route path='/user/:id' component={userAccount} />
-                <Route path='/view/:id/:logoId' component={ViewLogoScreen} />
-            </div>
-        </Router>
-    </ApolloProvider>, 
-    document.getElementById('root')
+  <ApolloProvider client={client}>
+    <Router>
+      <div>
+        <Route exact path="/" component={Login} />
+        <Route path="/register" component={Register} />
+        {/* <Route exact path='/' component={HomeScreen} /> */}
+        <Route path="/edit/:id/:logoId" component={EditLogoScreen} />
+        <Route path="/create/:id" component={CreateLogoScreen} />
+        <Route path="/user/:id" component={userAccount} />
+        <Route path="/view/:id/:logoId" component={ViewLogoScreen} />
+      </div>
+    </Router>
+  </ApolloProvider>,
+  document.getElementById('root')
 );
 
 // If you want your app to work offline and load faster, you can change
