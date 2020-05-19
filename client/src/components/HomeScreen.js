@@ -45,7 +45,10 @@ class HomeScreen extends Component {
   
   }
 
-
+  logout=(e)=>{
+    localStorage.clear();
+    window.location.href = '/';
+  }
   render() {
     return (
       <Query pollInterval={500} query={GET_LOGOS} variables={{ userId: this.state.userId}}>
@@ -135,7 +138,7 @@ class HomeScreen extends Component {
                       </Link>
                     </div>
                     <div>
-                      <button type="button" class="btn btn-primary btn-block ">
+                      <button type="button" class="btn btn-primary btn-block " onClick={this.logout}>
                         LogOut
                       </button>
                     </div>

@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import { TextComponent } from './TextComponent'
-import {LogoImage} from './LogoImage'
+import { LogoImage } from './LogoImage'
+import {NewText} from './NewText'
 const GET_LOGO = gql`
 
 query User($userId: String, $logoId: String ){
@@ -43,30 +44,34 @@ query User($userId: String, $logoId: String ){
 
 const UPDATE_LOGO = gql`
     mutation updateLogo(
-        $id: String!,   
-        $text: String!,
-        $color: String!,
+        $userId : String!,
+        $LogoId: String!,
         $borderColor : String!, 
         $backgroundColor: String!, 
-        $fontSize: Int!
-        $borderRadius: Int!, 
-        $borderWidth : Int!,
+        $borderRadius: Int!,
+        $borderWidth : Int!, 
         $padding : Int!, 
-        $margin : Int!
+        $margin : Int!,
+        $width : Int!,
+        $height : Int!,
+        $TextsArray : [textInput]
+        $ImageArr : [imageInput]
         ) {
             updateLogo(
-                id: $id,
-                text: $text,
-            color: $color,
-            borderColor : $borderColor,
-            backgroundColor: $backgroundColor, 
-            fontSize: $fontSize ,
-            borderRadius: $borderRadius, 
-            borderWidth : $borderWidth, 
-            padding : $padding,
-            margin : $margin
+                userId: $userId,
+                LogoId : $LogoId,
+                borderColor : $borderColor, 
+                backgroundColor: $backgroundColor, 
+                borderRadius: $borderRadius, 
+                borderWidth : $borderWidth, 
+                padding : $padding,
+                margin : $margin,
+                width : $width,
+                height : $height,
+                TextsArray: $TextsArray
+                ImageArr: $ImageArr
             ) {
-                    lastUpdate
+                _id
                 }
         }
 `;
@@ -146,7 +151,7 @@ class EditLogoScreen extends Component {
         this.setState({ borderColor: event.target.value })
     }
     fontSizeChange = (event) => {
-       
+
         let copyOfTextArr = [];
         Object.assign(copyOfTextArr, this.state.textArray);
         copyOfTextArr[this.state.currentText].fontSize = event.target.value;
@@ -194,7 +199,7 @@ class EditLogoScreen extends Component {
             document.getElementById("ColorInp").value = this.state.textArray[this.state.currentText].color;
             // disable properties for the logo itself
             this.disableLogoProperties(true);
-          
+
         })
 
     }
@@ -202,80 +207,102 @@ class EditLogoScreen extends Component {
 
         this.disableTextProperties(true);
         // enable logo properties
-        this.disableLogoProperties(false); 
-        this.setState({newImage:true});
+        this.disableLogoProperties(false);
+        this.setState({ newImage: true });
         this.clearImageFields();
 
     }
-    clearImageFields =() =>{
-        document.getElementById("imageSrc").value="";
-        document.getElementById("imageHeight").value= "";
-         document.getElementById("imageWidth").value ="";
+    clearImageFields = () => {
+        document.getElementById("imageSrc").value = "";
+        document.getElementById("imageHeight").value = "";
+        document.getElementById("imageWidth").value = "";
     }
-    AddImage =()=>{
+    addNewText = () => {
+        let copyArray = this.state.textArray;
+        copyArray.push(new NewText());
+        this.setState({ textArray: copyArray, numTexts: this.state.numTexts + 1 });
+    }
+    deleteText = () => {
+        let copyArray = [];
+        Object.assign(copyArray, this.state.textArray);
+        copyArray.splice(this.state.currentText, 1);
+        this.setState({ textArray: copyArray, numTexts: this.state.numTexts - 1 }, () => {
+            this.render();
+        });
+    }
+    AddImage = () => {
         let copyArray = this.state.imageArray;
         // get values from the inputs
         let imageURL = document.getElementById("imageSrc").value;
         let height = document.getElementById("imageHeight").value;
         let width = document.getElementById("imageWidth").value;
-        console.log("src is "+ imageURL+ " height "+ height+ " width :"+ width);
-       // console.log(this.imageExists(imageURL));
-       if(imageURL==""|| height ==""|| width==""){
-           console.log("blank shit")
-           return;
-       }
-        copyArray.push(new LogoImage(imageURL, height , width));
-        this.setState({ imageArray: copyArray, newImage:false },()=>{
-            document.getElementById("imageSrc").value="";
-            document.getElementById("imageHeight").value= "";
-             document.getElementById("imageWidth").value ="";
+        console.log("src is " + imageURL + " height " + height + " width :" + width);
+        // console.log(this.imageExists(imageURL));
+        if (imageURL == "" || height == "" || width == "") {
+            console.log("blank shit")
+            return;
+        }
+        copyArray.push(new LogoImage(imageURL, height, width));
+        this.setState({ imageArray: copyArray, newImage: false }, () => {
+            document.getElementById("imageSrc").value = "";
+            document.getElementById("imageHeight").value = "";
+            document.getElementById("imageWidth").value = "";
         });
 
     }
     imageClicked = (event, id) => {
         event.stopPropagation() //keyyyy.
         console.log(id); // set variable in state for current image clicked.
-        this.setState({ currentImage: id , newImage: false}, () => {
-                    document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
-                 document.getElementById("imageHeight").value= this.state.imageArray[this.state.currentImage].imageHeight;
-               document.getElementById("imageWidth").value= this.state.imageArray[this.state.currentImage].imageWidth;
+        this.setState({ currentImage: id, newImage: false }, () => {
+            document.getElementById("imageSrc").value = this.state.imageArray[this.state.currentImage].imageURL;
+            document.getElementById("imageHeight").value = this.state.imageArray[this.state.currentImage].imageHeight;
+            document.getElementById("imageWidth").value = this.state.imageArray[this.state.currentImage].imageWidth;
         });
 
     }
-    imageWidthChange= (e)=>{
-        if(this.state.imageArray.length == 0 || this.state.newImage == true){
+    deleteImage = () => {
+        let copyArray = [];
+        Object.assign(copyArray, this.state.imageArray);
+        copyArray.splice(this.state.currentImage, 1);
+        this.setState({ imageArray: copyArray}, () => {
+            this.clearImageFields()
+        });
+    }
+    imageWidthChange = (e) => {
+        if (this.state.imageArray.length == 0 || this.state.newImage == true) {
             return;
         }
-        let copyImageArr= [] ;
+        let copyImageArr = [];
         Object.assign(copyImageArr, this.state.imageArray);
-        copyImageArr[this.state.currentImage].imageWidth= e.target.value;
-        this.setState({imageArray: copyImageArr}, ()=>{
+        copyImageArr[this.state.currentImage].imageWidth = e.target.value;
+        this.setState({ imageArray: copyImageArr }, () => {
             // this.render();
         });
     }
-    imageHeightChange =(e)=>{
-        if(this.state.imageArray.length == 0 || this.state.newImage == true){
+    imageHeightChange = (e) => {
+        if (this.state.imageArray.length == 0 || this.state.newImage == true) {
             return;
         }
-        let copyImageArr= [] ;
+        let copyImageArr = [];
         Object.assign(copyImageArr, this.state.imageArray);
-        copyImageArr[this.state.currentImage].imageHeight= e.target.value;
-        this.setState({imageArray: copyImageArr}, ()=>{
+        copyImageArr[this.state.currentImage].imageHeight = e.target.value;
+        this.setState({ imageArray: copyImageArr }, () => {
             // this.render();
         });
     }
-    switchTabs =(evt) => {
+    switchTabs = (evt) => {
         console.log("we clicking")
         console.log(evt.target.name);
-        switch(evt.target.name){
-           case "Logo": 
-           document.getElementById("panel_form_Logo").style.display ="initial"
-           document.getElementById("panel_form_image").style.display ="none";break;
-           case "Image": 
-           document.getElementById("panel_form_Logo").style.display ="none"
-           document.getElementById("panel_form_image").style.display ="initial"
-            ; break;     }
-      }
+        switch (evt.target.name) {
+            case "Logo":
+                document.getElementById("panel_form_Logo").style.display = "initial"
+                document.getElementById("panel_form_image").style.display = "none"; break;
+            case "Image":
+                document.getElementById("panel_form_Logo").style.display = "none"
+                document.getElementById("panel_form_image").style.display = "initial"
+                    ; break;
+        }
+    }
     render() {
 
 
@@ -310,20 +337,20 @@ class EditLogoScreen extends Component {
                         container:
 
                         {
-                            
-                backgroundColor: this.state.backgroundColor,
-                borderColor: this.state.borderColor,
-                borderRadius: this.state.borderRadius + "px",
-                borderWidth: this.state.borderWidth + "px",
-                width: this.state.width + "pt",
-                height: this.state.height + "pt",
-                padding: this.state.padding + "px",
-                margin: this.state.margin + "px",
-                overflowX: "hidden",
-                overflowY: "hidden",
-                flexWrap: "wrap",
-                display: "flex",
-                borderStyle: "solid"
+
+                            backgroundColor: this.state.backgroundColor,
+                            borderColor: this.state.borderColor,
+                            borderRadius: this.state.borderRadius + "px",
+                            borderWidth: this.state.borderWidth + "px",
+                            width: this.state.width + "pt",
+                            height: this.state.height + "pt",
+                            padding: this.state.padding + "px",
+                            margin: this.state.margin + "px",
+                            overflowX: "hidden",
+                            overflowY: "hidden",
+                            flexWrap: "wrap",
+                            display: "flex",
+                            borderStyle: "solid"
 
                         }
 
@@ -349,7 +376,12 @@ class EditLogoScreen extends Component {
                                         <div className="nav-wrapper">
                                             <div className="panel-heading">
                                                 <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
-
+                                                <div >
+                                            <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
+                                            <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
+                                            <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                            <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
+                                              </div>
                                             </div>
                                         </div>
                                     </nav>
@@ -377,18 +409,37 @@ class EditLogoScreen extends Component {
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="imageWidth" htmlFor="color">Image Width:</label>
-                                                        <input id="imageWidth" type="number" className="imageWidth" name="imageWidth" onChange={(e)=>this.imageWidthChange(e)}/>
+                                                        <input id="imageWidth" type="number" className="imageWidth" name="imageWidth" onChange={(e) => this.imageWidthChange(e)} />
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="imageHeight" htmlFor="color">Image Height:</label>
 
-                                                        <input id="imageHeight" type="number" className="imageHeight" name="imageHeight" onChange={(e)=>this.imageHeightChange(e)}/>
+                                                        <input id="imageHeight" type="number" className="imageHeight" name="imageHeight" onChange={(e) => this.imageHeightChange(e)} />
                                                     </div>
 
                                                 </div>
                                             </form>
 
-                                            <form name="panel_form" id="panel_form_Logo">
+                                            <form name="panel_form" id="panel_form_Logo" onSubmit={e => {
+                                                e.preventDefault();
+                                                let copyArr = [];
+                                                this.state.textArray.map((text) => {
+                                                    copyArr.push({ color: text.color, fontSize: parseInt(text.fontSize), text: text.text })
+                                                });
+                                                let copyImageArr= [];
+                                                this.state.imageArray.map((image)=>{
+                                                    copyImageArr.push({imageWidth: parseInt(image.imageWidth),imageHeight:parseInt(image.imageHeight), imageURL: image.imageURL })
+                                                })
+                                               
+                                                updateLogo({
+                                                    variables: {
+                                                        userId: this.props.match.params.id, LogoId: this.props.match.params.logoId, TextsArray:copyArr, backgroundColor: this.state.backgroundColor,
+                                                     ImageArr:copyImageArr, height:parseInt(this.state.height), width:parseInt(this.state.width),  borderColor: this.state.borderColor, borderRadius: parseInt(this.state.borderRadius),
+                                                        borderWidth: parseInt(this.state.borderWidth), padding: parseInt(this.state.padding), margin: parseInt(this.state.margin)
+                                                    }
+                                                });
+                                              
+                                            }}>
                                                 <div className="card red darken" style={{ backgroundColor: "red" }}>
                                                     <div >
                                                         <h3 className="panel-title" style={{ textAlign: "center" }}>
@@ -435,11 +486,11 @@ class EditLogoScreen extends Component {
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="sliders_lables" htmlFor="padding">Padding:</label>
-                                                        <input id="paddingInp" min="0" max="250" type="number" className="input_sliders" name="padding"  value={this.state.padding} onChange={this.paddingChange} />
+                                                        <input id="paddingInp" min="0" max="250" type="number" className="input_sliders" name="padding" value={this.state.padding} onChange={this.paddingChange} />
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="sliders_lables" htmlFor="margin">Margin:</label>
-                                                        <input id="marginInp" min="0" max="250" type="number" className="input_sliders" name="margin"value={this.state.margin} onChange={this.MarginChange} />
+                                                        <input id="marginInp" min="0" max="250" type="number" className="input_sliders" name="margin" value={this.state.margin} onChange={this.MarginChange} />
                                                     </div>
 
                                                     <button type="submit" className="btn btn-success">Submit</button>
@@ -461,7 +512,7 @@ class EditLogoScreen extends Component {
                                                 ))}
                                                 {
                                                     this.state.imageArray.map((image, index) => (
-                                                        <img height={image.imageHeight +"px"} width={image.imageWidth +"px"} id={index} onClick={(event) => this.imageClicked(event ,event.target.id)} src={image.imageURL}></img>
+                                                        <img height={image.imageHeight + "px"} width={image.imageWidth + "px"} id={index} onClick={(event) => this.imageClicked(event, event.target.id)} src={image.imageURL}></img>
 
                                                     ))
                                                 }
@@ -469,6 +520,14 @@ class EditLogoScreen extends Component {
                                             </div>
 
                                         </div>
+
+                                        {/* <div className="buttonPannel">
+                                            <div > <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button> </div>
+                                            <div >   <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button> </div>
+                                            <div >         <button onClick={this.AddImage} className="btn btn-primary">Add Image</button> </div>
+                                        </div> */}
+
+
                                     </div>
 
                                 </div>

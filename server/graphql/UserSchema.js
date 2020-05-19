@@ -280,20 +280,20 @@ var queryType = new GraphQLObjectType({
             name: 'id',
             type: GraphQLString
           },
-          logoId: { 
+          logoId: {
             name: 'LogoId',
             type: GraphQLString
           }
         },
         resolve: function (root, params) {
           // const userLogo = userModel.findOne({'username':params.username, 'Logos._id':params.logoId, 'Logos.Texts._id':params.textId},{'Logos.$':1},{'Logos.Texts.$':1}).exec()
-          const userLogo = userModel.findOne({ '_id': params.userId, 'Logos._id': params.logoId},{'Logos.$':1}, function (error, documents) {
+          const userLogo = userModel.findOne({ '_id': params.userId, 'Logos._id': params.logoId }, { 'Logos.$': 1 }, function (error, documents) {
             console.log(documents);
           });
           if (!userLogo) {
             throw new Error('Error')
           }
-          return userLogo 
+          return userLogo
 
         }
       }
@@ -339,7 +339,8 @@ var mutation = new GraphQLObjectType({
         args: {
 
           userId: {
-            type: GraphQLString},
+            type: GraphQLString
+          },
           // },
           // fontSize: {
           //   type: GraphQLInt
@@ -371,7 +372,7 @@ var mutation = new GraphQLObjectType({
           height: {
             type: GraphQLInt
           },
-              
+
           padding: {
             type: GraphQLInt
           },
@@ -384,10 +385,10 @@ var mutation = new GraphQLObjectType({
           // imageHeight: {
           //   type: GraphQLInt
           // },
-          TextsArray:{
+          TextsArray: {
             type: GraphQLList(TextsInput)
           },
-          ImageArr:{
+          ImageArr: {
             type: GraphQLList(ImagesInput)
           }
         },
@@ -397,10 +398,10 @@ var mutation = new GraphQLObjectType({
             {
               $push: {
                 Logos: {
-                  Texts: params.TextsArray ,
-                  images:params.ImageArr,
+                  Texts: params.TextsArray,
+                  images: params.ImageArr,
                   width: params.width, height: params.height, backgroundColor: params.backgroundColor,
-                  borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius, padding: params.padding, 
+                  borderColor: params.borderColor, borderWidth: params.borderWidth, borderRadius: params.borderRadius, padding: params.padding,
                   margin: params.margin
                 }
               }
@@ -420,7 +421,7 @@ var mutation = new GraphQLObjectType({
           },
           LogoId: {
             type: GraphQLString
-          }, 
+          },
           fontSize: {
             type: GraphQLInt
           },
@@ -434,19 +435,19 @@ var mutation = new GraphQLObjectType({
         },
         resolve: function (root, params) {
           var objFriends = null;
-          const userLogo= userModel.updateOne({ "_id": params.id, "Logos._id": params.LogoId },
+          const userLogo = userModel.updateOne({ "_id": params.id, "Logos._id": params.LogoId },
             {
               $push: {
                 "Logos.$.Texts": {
-                    text:params.text, fontSize:params.fontSize , color:params.color
+                  text: params.text, fontSize: params.fontSize, color: params.color
                 }
               }
             });
 
-            if (!userLogo) {
-              throw new Error('Error')
-            }
-            return userLogo
+          if (!userLogo) {
+            throw new Error('Error')
+          }
+          return userLogo
         }
       },
       LogoAddImage: {
@@ -460,7 +461,7 @@ var mutation = new GraphQLObjectType({
             type: GraphQLString
           },
           imageURL: {
-            type:GraphQLString
+            type: GraphQLString
           },
           imageWidth: {
             type: GraphQLInt
@@ -468,27 +469,27 @@ var mutation = new GraphQLObjectType({
           imageHeight: {
             type: GraphQLInt
           }
-          
+
 
         },
         resolve: function (root, params) {
-       
-          const userLogo= userModel.updateOne({ "_id": params.id, "Logos._id": params.LogoId },
+
+          const userLogo = userModel.updateOne({ "_id": params.id, "Logos._id": params.LogoId },
             {
               $push: {
                 "Logos.$.images": {
-                    imageURL:params.imageURL, imageWidth:params.imageWidth , imageHeight: params.imageHeight
+                  imageURL: params.imageURL, imageWidth: params.imageWidth, imageHeight: params.imageHeight
                 }
               }
             });
 
-            if (!userLogo) {
-              throw new Error('Error')
-            }
-            return userLogo
+          if (!userLogo) {
+            throw new Error('Error')
+          }
+          return userLogo
         }
       },
-      LogoDelete:{
+      LogoDelete: {
         type: UserType,
         args: {
           id: {
@@ -499,17 +500,79 @@ var mutation = new GraphQLObjectType({
           }
         },
         resolve: function (root, params) {
-        
-          const userLogo= userModel.update({ "_id": params.id },
-            {
-              $pull: { "Logos": {"_id": params.LogoId} }
-            }
-            );
 
-            if (!userLogo) {
-              throw new Error('Error')
+          const userLogo = userModel.update({ "_id": params.id },
+            {
+              $pull: { "Logos": { "_id": params.LogoId } }
             }
-            return userLogo
+          );
+
+          if (!userLogo) {
+            throw new Error('Error')
+          }
+          return userLogo
+        }
+      },
+
+      updateLogo: {
+        type: UserType,
+        args: {
+
+          userId: {
+            type: GraphQLString
+          },
+
+          LogoId: {
+            type: GraphQLString
+          },
+
+          TextsArray: {
+            type: GraphQLList(TextsInput)
+          },
+          ImageArr: {
+            type: GraphQLList(ImagesInput)
+          }
+          ,
+          backgroundColor: {
+            type: GraphQLString
+          },
+          borderColor: {
+            type: GraphQLString
+          },
+          borderWidth: {
+            type: GraphQLInt
+          },
+          borderRadius: {
+            type: GraphQLInt
+          },
+          width: {
+            type: GraphQLInt
+          },
+          height: {
+            type: GraphQLInt
+          },
+
+          padding: {
+            type: GraphQLInt
+          },
+          margin: {
+            type: GraphQLInt
+          }
+
+        },
+        resolve: function (root, params) {
+          const userLogo = userModel.update(
+            { '_id': params.userId, "Logos._id": params.LogoId },
+            {
+              $set: { "Logos.$": {_id: params.LogoId,Texts: params.TextsArray, images: params.ImageArr,
+              width: params.width, height: params.height, backgroundColor:params.backgroundColor,
+            borderColor:params.borderColor, borderWidth:params.borderWidth, 
+          borderRadius:params.borderRadius, padding:params.padding, margin:params.margin } }
+            });
+          if (!userLogo) {
+            throw new Error('Error')
+          }
+          return userLogo
         }
       }
     }

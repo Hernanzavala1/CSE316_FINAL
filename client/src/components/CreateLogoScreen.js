@@ -190,6 +190,14 @@ class CreateLogoScreen extends Component {
         })
 
     }
+    deleteImage = () => {
+        let copyArray = [];
+        Object.assign(copyArray, this.state.imageArray);
+        copyArray.splice(this.state.currentImage, 1);
+        this.setState({ imageArray: copyArray}, () => {
+            this.clearImageFields()
+        });
+    }
     deleteText = () => {
         let copyArray = [];
         Object.assign(copyArray, this.state.textArray);
@@ -315,6 +323,7 @@ class CreateLogoScreen extends Component {
                                             <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
                                             <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
                                             <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                            <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
                                      </div>
                                 </div>
                             </div>
