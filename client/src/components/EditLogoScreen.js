@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 import { Query, Mutation } from "react-apollo";
 import { TextComponent } from './TextComponent'
 import { LogoImage } from './LogoImage'
-import {NewText} from './NewText'
+import { NewText } from './NewText'
 const GET_LOGO = gql`
 
 query User($userId: String, $logoId: String ){
@@ -109,7 +109,7 @@ class EditLogoScreen extends Component {
     updateText = (event) => {
         event.preventDefault();
         console.log(this.state.textArray[this.state.currentText]);
-        if(this.state.textArray[this.state.currentText] === undefined){
+        if (this.state.textArray[this.state.currentText] === undefined) {
             return;
         }
         // this.changeText();
@@ -139,8 +139,8 @@ class EditLogoScreen extends Component {
     }
     ColorChange = (event) => {
         event.preventDefault();
-        if(this.state.textArray[this.state.currentText] === undefined){
-            
+        if (this.state.textArray[this.state.currentText] === undefined) {
+
             return;
         }
         //this.setState({ textColor: event.target.value })
@@ -162,9 +162,9 @@ class EditLogoScreen extends Component {
     }
     fontSizeChange = (event) => {
         event.preventDefault();
-            if(this.state.textArray[this.state.currentText] === undefined){
-                return;
-            }
+        if (this.state.textArray[this.state.currentText] === undefined) {
+            return;
+        }
         let copyOfTextArr = [];
         Object.assign(copyOfTextArr, this.state.textArray);
         copyOfTextArr[this.state.currentText].fontSize = event.target.value;
@@ -199,7 +199,7 @@ class EditLogoScreen extends Component {
         document.getElementById("textFontSize").disabled = value;
     }
     textClicked = (index) => {
-    
+
         // 
         console.log("The text index is " + index)
 
@@ -231,7 +231,8 @@ class EditLogoScreen extends Component {
         document.getElementById("imageHeight").value = "";
         document.getElementById("imageWidth").value = "";
     }
-    addNewText = () => {
+    addNewText = (e) => {
+        e.preventDefault();
         let copyArray = this.state.textArray;
         copyArray.push(new NewText());
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts + 1 });
@@ -242,10 +243,11 @@ class EditLogoScreen extends Component {
         Object.assign(copyArray, this.state.textArray);
         copyArray.splice(this.state.currentText, 1);
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts - 1 }, () => {
-           // this.render();
+            // this.render();
         });
     }
-    AddImage = () => {
+    AddImage = (e) => {
+        e.preventDefault();
         let copyArray = this.state.imageArray;
         // get values from the inputs
         let imageURL = document.getElementById("imageSrc").value;
@@ -275,11 +277,12 @@ class EditLogoScreen extends Component {
         });
 
     }
-    deleteImage = () => {
+    deleteImage = (e) => {
+        e.preventDefault();
         let copyArray = [];
         Object.assign(copyArray, this.state.imageArray);
         copyArray.splice(this.state.currentImage, 1);
-        this.setState({ imageArray: copyArray}, () => {
+        this.setState({ imageArray: copyArray }, () => {
             this.clearImageFields()
         });
     }
@@ -376,14 +379,14 @@ class EditLogoScreen extends Component {
                     if (textArray.length > 0) {
                         text =
                             <input id="TextInp" value={textArray[this.state.currentText].text} style={{ width: "max-content" }} className="form-control" onChange={this.updateText} />
-                            color =  <input id="ColorInp" type="color" className="color_input" name="color" value={textArray[this.state.currentText].color} onChange={this.ColorChange} />;
-                            fontSize=  <input id="textFontSize" value={textArray[this.state.currentText].fontSize} min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
-                        }
+                        color = <input id="ColorInp" type="color" className="color_input" name="color" value={textArray[this.state.currentText].color} onChange={this.ColorChange} />;
+                        fontSize = <input id="textFontSize" value={textArray[this.state.currentText].fontSize} min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
+                    }
                     else {
                         text =
                             <input id="TextInp" style={{ width: "max-content" }} className="form-control" onChange={this.updateText} />
-                            color =  <input id="ColorInp" type="color" className="color_input" name="color"  onChange={this.ColorChange} />;
-                            fontSize=  <input id="textFontSize" min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
+                        color = <input id="ColorInp" type="color" className="color_input" name="color" onChange={this.ColorChange} />;
+                        fontSize = <input id="textFontSize" min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
                     }
 
                     return (
@@ -395,12 +398,12 @@ class EditLogoScreen extends Component {
                                         <div className="nav-wrapper">
                                             <div className="panel-heading">
                                                 <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
-                                                <div >
-                                            <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
-                                            <button onClick={(event)=>this.deleteText(event)} className="btn btn-primary"> Delete Text </button>
-                                            <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
-                                            <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
-                                              </div>
+                                                {/* <div >
+                                                    <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
+                                                    <button onClick={(event) => this.deleteText(event)} className="btn btn-primary"> Delete Text </button>
+                                                    <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                                    <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
+                                                </div> */}
                                             </div>
                                         </div>
                                     </nav>
@@ -413,13 +416,13 @@ class EditLogoScreen extends Component {
                                                 <button name="Image" class="tablinks" onClick={this.switchTabs}>Image</button>
 
                                             </div>
-                                            <form style={{ display: "none" }} id="panel_form_image">
+                                            <div style={{ display: "none" }} id="panel_form_image">
                                                 <div className="card red darken" style={{ backgroundColor: "red" }}>
 
                                                     <div >
                                                         <h3 className="panel-title" style={{ textAlign: "center" }}>
-                                                            Edit Image
-                                                           </h3>
+                                                            Create Image
+                                                          </h3>
                                                     </div>
 
                                                     <div className="form-group" >
@@ -435,9 +438,13 @@ class EditLogoScreen extends Component {
 
                                                         <input id="imageHeight" type="number" className="imageHeight" name="imageHeight" onChange={(e) => this.imageHeightChange(e)} />
                                                     </div>
+                                                    <div>
+                                                        <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                                        <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
+                                                    </div>
 
                                                 </div>
-                                            </form>
+                                            </div>
 
                                             <form name="panel_form" id="panel_form_Logo" onSubmit={e => {
                                                 e.preventDefault();
@@ -445,19 +452,19 @@ class EditLogoScreen extends Component {
                                                 this.state.textArray.map((text) => {
                                                     copyArr.push({ color: text.color, fontSize: parseInt(text.fontSize), text: text.text })
                                                 });
-                                                let copyImageArr= [];
-                                                this.state.imageArray.map((image)=>{
-                                                    copyImageArr.push({imageWidth: parseInt(image.imageWidth),imageHeight:parseInt(image.imageHeight), imageURL: image.imageURL })
+                                                let copyImageArr = [];
+                                                this.state.imageArray.map((image) => {
+                                                    copyImageArr.push({ imageWidth: parseInt(image.imageWidth), imageHeight: parseInt(image.imageHeight), imageURL: image.imageURL })
                                                 })
-                                               
+
                                                 updateLogo({
                                                     variables: {
-                                                        userId: this.props.match.params.id, LogoId: this.props.match.params.logoId, TextsArray:copyArr, backgroundColor: this.state.backgroundColor,
-                                                     ImageArr:copyImageArr, height:parseInt(this.state.height), width:parseInt(this.state.width),  borderColor: this.state.borderColor, borderRadius: parseInt(this.state.borderRadius),
+                                                        userId: this.props.match.params.id, LogoId: this.props.match.params.logoId, TextsArray: copyArr, backgroundColor: this.state.backgroundColor,
+                                                        ImageArr: copyImageArr, height: parseInt(this.state.height), width: parseInt(this.state.width), borderColor: this.state.borderColor, borderRadius: parseInt(this.state.borderRadius),
                                                         borderWidth: parseInt(this.state.borderWidth), padding: parseInt(this.state.padding), margin: parseInt(this.state.margin)
                                                     }
                                                 });
-                                              
+
                                             }}>
                                                 <div className="card red darken" style={{ backgroundColor: "red" }}>
                                                     <div >
@@ -465,7 +472,11 @@ class EditLogoScreen extends Component {
                                                             Edit Logo
                                                           </h3>
                                                     </div>
+                                                    <div >
+                                                        <button onClick={this.addNewText} className="btn btn-primary"> Add New Text </button>
+                                                        <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
 
+                                                    </div>
                                                     <div >
                                                         <label>Text:</label>
                                                         {text}
@@ -493,7 +504,7 @@ class EditLogoScreen extends Component {
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="sliders_lables" htmlFor="fontSize">Font Size:</label>
-                                                            {fontSize}
+                                                        {fontSize}
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="sliders_lables" htmlFor="borderWidth">Border Width:</label>

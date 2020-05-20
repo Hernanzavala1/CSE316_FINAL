@@ -128,7 +128,7 @@ class ViewLogoScreen extends Component {
 
 
         return (
-            <Query pollInterval={500} query={GET_LOGO} variables={{ userId: this.props.match.params.id, logoId: this.props.match.params.logoId }}>
+            <Query pollInterval={500} fetchPolicy="no-cache" query={GET_LOGO} variables={{ userId: this.props.match.params.id, logoId: this.props.match.params.logoId }}>
                 {({ loading, error, data }) => {
                     if (loading) return 'Loading...';
                     if (error) return `Error! ${error.message}`;
