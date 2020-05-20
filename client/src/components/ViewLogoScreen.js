@@ -4,7 +4,8 @@ import '../App.css';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import { TextComponent } from '../components/TextComponent'
-
+import domtoimage from 'dom-to-image';
+    
 const GET_LOGO = gql`
 
 query User($userId: String, $logoId: String ){
@@ -103,6 +104,20 @@ class ViewLogoScreen extends Component {
         }
 
     }
+    ExportLogo =(e)=>{
+        e.preventDefault();
+        console.log("IN EXPORT LOGO")
+
+        console.log(document.getElementsByClassName('workspace')[0])
+        domtoimage.toPng(document.getElementById('Logo'))
+        .then(function (dataUrl) {
+            var link = document.createElement('a');
+
+            link.download = 'my-image-name.jpeg';
+            link.href = dataUrl;
+            link.click();
+        });
+    }
     render() {
         let textArray = [];
         let imageArray = [];
@@ -175,13 +190,26 @@ class ViewLogoScreen extends Component {
 
                         </dl>
                     }
-
+                        
+                        let text = "";
+                        let fontSize =0;
+                        let color = "";
+                        if(textArray.length > 0){
+                            text=textArray[this.state.currentText].text;
+                            color = textArray[this.state.currentText].color;
+                            fontSize = textArray[this.state.currentText].fontSize;
+                        }
+                        
                     return (
                         <div className="container">
                             <nav className="nav-bar">
                                 <div className="nav-wrapper">
                                     <div className="panel-heading">
                                         <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
+
+                                        
+                                          
+                           
 
                                     </div>
                                 </div>
@@ -217,17 +245,17 @@ class ViewLogoScreen extends Component {
                                             <dt>Text:</dt>
                                             <div className="col s8" style={{ display: "inline-grid" }}>
                                                 <pre style={{ overflow: "auto" }}>
-                                                    <dd  >{textArray[this.state.currentText].text}</dd>
+                                                    <dd  >{text}</dd>
                                                 </pre>
                                             </div>
                                             <dt>Color:</dt>
-                                            <dd>{logo.Texts[this.state.currentText].color}</dd>
+                                            <dd >{color}</dd>
                                             <dt>borderColor:</dt>
                                             <dd>{logo.borderColor}</dd>
                                             <dt>backgroundColor:</dt>
                                             <dd>{logo.backgroundColor}</dd>
                                             <dt>Font Size:</dt>
-                                            <dd>{logo.Texts[this.state.currentText].fontSize}</dd>
+                                            <dd>{fontSize}</dd>
                                             <dt>Border Radius:</dt>
                                             <dd>{logo.borderRadius}</dd>
                                             <dt>Border Width:</dt>
@@ -251,6 +279,7 @@ class ViewLogoScreen extends Component {
                                                         }}>
                                                         <Link to={`/edit/${userId}/${logo._id}`} className="btn btn-success">Edit</Link>&nbsp;
                                                 <button type="submit" className="btn btn-danger">Delete</button>
+                                                <button className=" btn-danger btn" onClick={this.ExportLogo}> Export </button>
                                                     </form>
                                                     {loading && <p>Loading...</p>}
                                                     {error && <p>Error :( Please try again</p>}
@@ -262,7 +291,7 @@ class ViewLogoScreen extends Component {
 
                                 <div className="workspace">
 
-                                    <div className="Logo" style={styles.container}>
+                                    <div id ="Logo" className="Logo" style={styles.container}>
                                         {textArray.map((text, index) => (
                                             <TextComponent
                                                 textClicked={this.textClicked}

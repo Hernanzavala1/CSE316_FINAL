@@ -107,6 +107,11 @@ class EditLogoScreen extends Component {
 
     }
     updateText = (event) => {
+        event.preventDefault();
+        console.log(this.state.textArray[this.state.currentText]);
+        if(this.state.textArray[this.state.currentText] === undefined){
+            return;
+        }
         // this.changeText();
         if (this.state.numTexts == 0) {
             document.getElementById("TextInp").value = "";
@@ -133,6 +138,11 @@ class EditLogoScreen extends Component {
         this.setState({ height: event.target.value })
     }
     ColorChange = (event) => {
+        event.preventDefault();
+        if(this.state.textArray[this.state.currentText] === undefined){
+            
+            return;
+        }
         //this.setState({ textColor: event.target.value })
         let copyOfTextArr = [];
         Object.assign(copyOfTextArr, this.state.textArray);
@@ -151,7 +161,10 @@ class EditLogoScreen extends Component {
         this.setState({ borderColor: event.target.value })
     }
     fontSizeChange = (event) => {
-
+        event.preventDefault();
+            if(this.state.textArray[this.state.currentText] === undefined){
+                return;
+            }
         let copyOfTextArr = [];
         Object.assign(copyOfTextArr, this.state.textArray);
         copyOfTextArr[this.state.currentText].fontSize = event.target.value;
@@ -186,6 +199,7 @@ class EditLogoScreen extends Component {
         document.getElementById("textFontSize").disabled = value;
     }
     textClicked = (index) => {
+        
         // 
         console.log("The text index is " + index)
 
@@ -222,12 +236,13 @@ class EditLogoScreen extends Component {
         copyArray.push(new NewText());
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts + 1 });
     }
-    deleteText = () => {
+    deleteText = (event) => {
+        event.preventDefault();
         let copyArray = [];
         Object.assign(copyArray, this.state.textArray);
         copyArray.splice(this.state.currentText, 1);
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts - 1 }, () => {
-            this.render();
+           // this.render();
         });
     }
     AddImage = () => {
@@ -356,15 +371,19 @@ class EditLogoScreen extends Component {
 
                     }
                     let text;
+                    let color;
+                    let fontSize;
                     if (textArray.length > 0) {
                         text =
                             <input id="TextInp" value={textArray[this.state.currentText].text} style={{ width: "max-content" }} className="form-control" onChange={this.updateText} />
-
-                    }
+                            color =  <input id="ColorInp" type="color" className="color_input" name="color" value={textArray[this.state.currentText].color} onChange={this.ColorChange} />;
+                            fontSize=  <input id="textFontSize" value={textArray[this.state.currentText].fontSize} min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
+                        }
                     else {
                         text =
                             <input id="TextInp" style={{ width: "max-content" }} className="form-control" onChange={this.updateText} />
-
+                            color =  <input id="ColorInp" type="color" className="color_input" name="color"  onChange={this.ColorChange} />;
+                            fontSize=  <input id="textFontSize" min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
                     }
 
                     return (
@@ -378,7 +397,7 @@ class EditLogoScreen extends Component {
                                                 <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
                                                 <div >
                                             <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
-                                            <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
+                                            <button onClick={(event)=>this.deleteText(event)} className="btn btn-primary"> Delete Text </button>
                                             <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
                                             <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
                                               </div>
@@ -454,7 +473,7 @@ class EditLogoScreen extends Component {
 
                                                     <div className="form-group">
                                                         <label className="colorInputLabel" htmlFor="color">Color:</label>
-                                                        <input id="ColorInp" type="color" className="color_input" name="color" value={textArray[this.state.currentText].color} onChange={this.ColorChange} />
+                                                        {color}
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="colorInputLabel" htmlFor="color">backgroundColor:</label>
@@ -474,7 +493,7 @@ class EditLogoScreen extends Component {
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="sliders_lables" htmlFor="fontSize">Font Size:</label>
-                                                        <input id="textFontSize" min="4" max="150" type="number" className="input_sliders" name="Font Size" onChange={this.fontSizeChange} />
+                                                            {fontSize}
                                                     </div>
                                                     <div className="form-group">
                                                         <label className="sliders_lables" htmlFor="borderWidth">Border Width:</label>

@@ -176,3 +176,20 @@ align-self: center;
 .tab button.active {
   background-color: #ccc;
 }
+.logoList{
+background: black;
+color: white;
+border: solid;
+border-width: 10;
+padding: 10px;
+border-width: 8px;
+border-color: red;
+}
+.buttonPanel{
+background: black;
+border: solid;
+border-width: 10px;
+border-color: red;
+margin-left: 10px;
+
+}

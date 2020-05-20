@@ -190,7 +190,8 @@ class CreateLogoScreen extends Component {
         })
 
     }
-    deleteImage = () => {
+    deleteImage = (e) => {
+        e.preventDefault();
         let copyArray = [];
         Object.assign(copyArray, this.state.imageArray);
         copyArray.splice(this.state.currentImage, 1);
@@ -198,7 +199,8 @@ class CreateLogoScreen extends Component {
             this.clearImageFields()
         });
     }
-    deleteText = () => {
+    deleteText = (e) => {
+        e.preventDefault();
         let copyArray = [];
         Object.assign(copyArray, this.state.textArray);
         copyArray.splice(this.state.currentText, 1);
@@ -206,12 +208,14 @@ class CreateLogoScreen extends Component {
             this.render();
         });
     }
-    addNewText = () => {
+    addNewText = (e) => {
+        e.preventDefault();
         let copyArray = this.state.textArray;
         copyArray.push(new NewText());
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts + 1 });
     }
-    AddImage =()=>{
+    AddImage =(e)=>{
+        e.preventDefault();
         let copyArray = this.state.imageArray;
         // get values from the inputs
         let imageURL = document.getElementById("imageSrc").value;
@@ -319,12 +323,12 @@ class CreateLogoScreen extends Component {
                             <div className="nav-wrapper">
                                 <div className="panel-heading">
                                     <h4><Link style={{ color: "black" }} to="/homescreen">Home</Link></h4>
-                                    <div >
+                                    {/* <div >
                                             <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
                                             <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
                                             <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
                                             <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
-                                     </div>
+                                     </div> */}
                                 </div>
                             </div>
                         </nav>
@@ -404,7 +408,12 @@ class CreateLogoScreen extends Component {
                                                 Create Logo
                                             </h3>
                                         </div>
-                                       
+                                        <div >
+                                            <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
+                                            <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
+                                            <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                            <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
+                                     </div>
                                        
                                         <div className="form-group" >
                                             <label htmlFor="text">Text:</label>
@@ -487,7 +496,7 @@ class CreateLogoScreen extends Component {
                                     ))}
                                     {
                                         this.state.imageArray.map((image, index) =>(
-                                            <img style={{zIndex:1}} height={image.imageHeight +"px"} width={image.imageWidth +"px"}   id ={index} onClick = {(event) =>this.imageClicked(event, event.target.id)} src = {image.imageURL}></img>
+                                            <img style={{zIndex:1}} height={image.imageHeight +"px"} width={image.imageWidth +"px"}   id ={index} onClick = {(event) =>this.imageClicked(event, event.target.id)} src = {image.imageURL} crossOrigin="anonymous" ></img>
                                     
                                            ) )
                                     }

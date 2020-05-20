@@ -33,6 +33,7 @@ class HomeScreen extends Component {
     super()
     this.state={
       userId: ""
+   
     }
   }
 
@@ -57,16 +58,18 @@ class HomeScreen extends Component {
           if (error) return `Error! ${error.message}`;
           //  console.log(data.user.Logos[0].Texts[0].text);
           let Logos = data.user.Logos;
-
-          console.log(data.user._id);
-
-          // console.log(Logos[0].Texts[0].text);
-          // data.logos.sort((a,b)=> (a.lastUpdate < b.lastUpdate)? 1: -1);
-          // for( let i =0 ;i < data.logos.length; i++){
-          //     if(data.logos[i].text.length > 25){
-          //         data.logos[i].text = data.logos[i].text.substring(0, 25 )+ "...";
-          //     }
-          // }
+          let links =[];
+             Logos.map((logo, index)=>{
+               if(logo.Texts.length ===0){
+                links.push("Blank Logo");
+               }
+               else{
+                links.push(logo.Texts[0].text);
+               }
+             })
+          console.log(links);
+         
+          
 
           return (
             <div className="container ">
@@ -77,7 +80,7 @@ class HomeScreen extends Component {
               </div>
 
               <div className="row center-block  text-center h-100 ">
-                <div className="col-lg-8 ">
+                <div id ="logoList" className="logoList col-lg-8 ">
                   <div className="well">
                     <br />
                     <br />
@@ -89,23 +92,25 @@ class HomeScreen extends Component {
                   <div>
                     <h3>Recent Work</h3>
                     {data.user.Logos.map((logo, index) => (
+                      
+                      
                       <div
                         key={index}
                         className="home_logo_link"
                         style={{ cursor: 'pointer' }}
                       >
                         <Link
-                          style={{ color: 'black' }}
+                          style={{ color: 'blue', fontSize:20 }}
                           to={`/view/${data.user._id}/${logo._id}`}
                         >
-                          {logo.Texts[0].text}
+                          {links[index]}
                         </Link>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="col col-lg-offset-6">
+                <div className="col col-lg-offset-6 buttonPanel">
                   <div className="well">
                     <br />
                     <br />
@@ -116,7 +121,7 @@ class HomeScreen extends Component {
 
                   <div className="vcenter">
                     <div>
-                      <h3> Menu </h3>
+                      <h3 style={{fontWeight:"bold", color: "white"}}> Menu </h3>
                     </div>
 
                     <div>
