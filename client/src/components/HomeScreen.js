@@ -90,7 +90,7 @@ class HomeScreen extends Component {
                   </div>
 
                   <div>
-                    <h3>Recent Work</h3>
+                    <h3 style={{fontWeight:"bold"}} >Recent Work</h3>
                     {data.user.Logos.map((logo, index) => (
                       
                       

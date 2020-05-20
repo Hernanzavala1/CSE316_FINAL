@@ -137,6 +137,10 @@ class userAccount extends Component {
                                     
                                     <form className="input_panel" id="input_panel" style={{ display: "none" }} onSubmit={e => {
                                         e.preventDefault();
+                                        if(this.state.username.trim() === ""){
+                                            alert("Username cannot be empty!")
+                                            return;
+                                        }
                                         updateUser({ variables: { userId: this.props.match.params.id, username: this.state.username, email: this.state.email } });
                                     }}  >
                                         <div className="panel">
