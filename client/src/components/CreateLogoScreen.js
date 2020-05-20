@@ -494,11 +494,7 @@ class CreateLogoScreen extends Component {
 
                                 </div>
                             </div>
-                            <div className="buttonPannel">
-                            <div > <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button> </div>
-                            <div >   <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button> </div>
-                            <div >         <button onClick={this.AddImage} className="btn btn-primary">Add Image</button> </div>
-                                     </div>
+                           
                         </div>
 
                     </div>

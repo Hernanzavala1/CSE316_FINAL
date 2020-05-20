@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Login.css';
 
+
 class Register extends Component {
   constructor() {
     super();
@@ -44,7 +45,7 @@ class Register extends Component {
     const { username, email, password } = this.state;
     return (
       <div class="container">
-        <form class="form-signin" onSubmit={this.onSubmit}>
+        <form id="form-signin" className="form-signin" onSubmit={this.onSubmit}>
           <h2 class="form-signin-heading">Register</h2>
           <label for="inputUsername" class="sr-only">
             User Name
