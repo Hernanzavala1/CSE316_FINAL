@@ -54,7 +54,7 @@ class userAccount extends Component {
         switch (val) {
             case true:
                 document.getElementById("user_panel").style.display = "none";
-                document.getElementById("input_panel").style.display = "initial";
+                document.getElementById("input_panel").style.display = "inherit";
 
                 break;
             case false:
@@ -100,20 +100,20 @@ class userAccount extends Component {
 
                             <div id="user_panel" className="row ">
 
-                                <div className=" col-lg-12  center-block  text-center">
+                                <div className="userAccountPanel col-lg-12  center-block  text-center">
 
                                     <div className="panel">
                                         <div>
-                                            <label> Username:</label>
+                                            <label className="userPanelLabels"> Username:</label>
                                         </div>
                                         <div>
-                                            <label> {data.user.username}</label>
+                                            <label className="userPanelLabels"> {data.user.username}</label>
                                         </div>
                                         <div>
-                                            <label> email:</label>
+                                            <label className="userPanelLabels"> email:</label>
                                         </div>
                                         <div>
-                                            <label >  {data.user.email} </label>
+                                            <label className="userPanelLabels">  {data.user.email} </label>
                                         </div>
 
                                         <div>
@@ -135,19 +135,19 @@ class userAccount extends Component {
                             <Mutation mutation={UPDATE_USER} key={data.user._id} onCompleted={() => this.props.history.push(`/homescreen`)}>
                                 {(updateUser, { loading, error }) => ( 
                                     
-                                    <form id="input_panel" style={{ display: "none" }} onSubmit={e => {
+                                    <form className="input_panel" id="input_panel" style={{ display: "none" }} onSubmit={e => {
                                         e.preventDefault();
                                         updateUser({ variables: { userId: this.props.match.params.id, username: this.state.username, email: this.state.email } });
                                     }}  >
                                         <div className="panel">
                                             <div>
-                                                <label> Username:</label>
+                                                <label className="userPanelLabels" > Username:</label>
                                             </div>
                                             <div>
                                                 <input name="username" type="text" onChange={this.onChange} value={username} />
                                             </div>
                                             <div>
-                                                <label> email:</label>
+                                                <label className="userPanelLabels"> email:</label>
                                             </div>
                                             <div>
                                                 <input type="email" value={email} name="email" onChange={this.onChange} />

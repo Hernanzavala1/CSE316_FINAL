@@ -120,6 +120,9 @@ class CreateLogoScreen extends Component {
         this.setState({ borderColor: event.target.value })
     }
     fontSizeChange = (event) => {
+        if(this.state.textArray[this.state.currentText] === undefined){
+            return;
+        }
         //     console.log("old object is :")
         //     console.log( this.state.textArray[this.state.currentText]);
         //    // console.log(event.target.value)
