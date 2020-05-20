@@ -214,22 +214,24 @@ class CreateLogoScreen extends Component {
         copyArray.push(new NewText());
         this.setState({ textArray: copyArray, numTexts: this.state.numTexts + 1 });
     }
-    AddImage =(e)=>{
+    AddImage = (e) => {
         e.preventDefault();
         let copyArray = this.state.imageArray;
         // get values from the inputs
         let imageURL = document.getElementById("imageSrc").value;
         let height = document.getElementById("imageHeight").value;
         let width = document.getElementById("imageWidth").value;
-        console.log("src is "+ imageURL+ " height "+ height+ " width :"+ width);
-       // console.log(this.imageExists(imageURL));
-       if(imageURL==""|| height ==""|| width==""){
-           console.log("blank shit")
-           return;
-       }
-        copyArray.push(new LogoImage(imageURL, height , width));
-        this.setState({ imageArray: copyArray, newImage:false },()=>{
-          this.clearImageFields();
+        console.log("src is " + imageURL + " height " + height + " width :" + width);
+        // console.log(this.imageExists(imageURL));
+        if (imageURL == "" || height == "" || width == "") {
+            console.log("blank shit")
+            return;
+        }
+        copyArray.push(new LogoImage(imageURL, height, width));
+        this.setState({ imageArray: copyArray, newImage: false }, () => {
+            document.getElementById("imageSrc").value = "";
+            document.getElementById("imageHeight").value = "";
+            document.getElementById("imageWidth").value = "";
         });
 
     }
@@ -326,7 +328,7 @@ class CreateLogoScreen extends Component {
                                     {/* <div >
                                             <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
                                             <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
-                                            <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                            <button onClick={ this.AddImage} className="btn btn-primary">Add Image</button>
                                             <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
                                      </div> */}
                                 </div>
@@ -341,7 +343,7 @@ class CreateLogoScreen extends Component {
                                     <button name ="Image" class="tablinks" onClick={ this.switchTabs}>Image</button>
                         
                                 </div>
-                                <form style={{ display: "none" }} id="panel_form_image">
+                                <div style={{ display: "none" }} id="panel_form_image">
                                     <div className="card red darken" style={{ backgroundColor: "red" }}>
 
                                         <div >
@@ -363,9 +365,13 @@ class CreateLogoScreen extends Component {
 
                                             <input  id="imageHeight" type="number" className="imageHeight" name="imageHeight" onChange={(e)=>this.imageHeightChange(e)} />
                                         </div>
-                                      
+                                         <div>
+                                        <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
+                                         <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
+                                        </div> 
+                                       
                                     </div>
-                                </form>
+                                </div>
                                 <form name="panel_form" id="panel_form_Logo" onSubmit={e => {
                                     e.preventDefault();
                                     let copyArr = [];
@@ -409,10 +415,9 @@ class CreateLogoScreen extends Component {
                                             </h3>
                                         </div>
                                         <div >
-                                            <button onClick={this.addNewText} className="btn btn-primary"> ADD NEW TEXT </button>
+                                            <button onClick={this.addNewText} className="btn btn-primary"> Add New Text </button>
                                             <button onClick={this.deleteText} className="btn btn-primary"> Delete Text </button>
-                                            <button onClick={this.AddImage} className="btn btn-primary">Add Image</button>
-                                            <button onClick={this.deleteImage} className="btn btn-primary"> Delete Image </button>
+                                           
                                      </div>
                                        
                                         <div className="form-group" >
@@ -496,7 +501,7 @@ class CreateLogoScreen extends Component {
                                     ))}
                                     {
                                         this.state.imageArray.map((image, index) =>(
-                                            <img style={{zIndex:1}} height={image.imageHeight +"px"} width={image.imageWidth +"px"}   id ={index} onClick = {(event) =>this.imageClicked(event, event.target.id)} src = {image.imageURL} crossOrigin="anonymous" ></img>
+                                            <img key={index}  height={image.imageHeight +"px"} width={image.imageWidth +"px"}   id ={index} onClick = {(event) =>this.imageClicked(event, event.target.id)} src = {image.imageURL}  alt="Error"></img>
                                     
                                            ) )
                                     }

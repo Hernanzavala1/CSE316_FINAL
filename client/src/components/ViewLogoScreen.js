@@ -116,6 +116,9 @@ class ViewLogoScreen extends Component {
             link.download = 'my-image-name.jpeg';
             link.href = dataUrl;
             link.click();
+        }).catch((error)=>{
+            console.log("couldnt fetch one of the images"+ error)
+            alert("One of the images cannot be fetch!");
         });
     }
     render() {

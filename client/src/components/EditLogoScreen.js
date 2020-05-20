@@ -199,7 +199,7 @@ class EditLogoScreen extends Component {
         document.getElementById("textFontSize").disabled = value;
     }
     textClicked = (index) => {
-        
+    
         // 
         console.log("The text index is " + index)
 
