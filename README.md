@@ -1,3 +1,19 @@
+This is a project for my CSE 316 course at Stony Brook University.
+The overall idea behind this project is to make app that will allow users, who can sign in and make their own accounts, to create their Logos. The Logos can be design shaped based on the user's desires. 
+Below are listed some of the technologies that allowed me to come up with such App:
+- React 
+- Node.js (runtime environment)
+- Express (Server)
+- Materialize( Styling ) 
+- Bootstrap (Styling)
+- Mongoose (ODM)
+- MongoDB (Database)
+- GraphQL(query language)
+- Passport(Authentication)
+
+This project allowed me to delve upon these technologies to a great extent and i will continue to work with them for upcoming projects.
+
+
 querying all the logos from the database
 {
   logos {
